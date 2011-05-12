@@ -26,5 +26,6 @@
         "beer",
         "whiskey",
         "wine"
-    ]
+    ],
+    weight: 172
 }
