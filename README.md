@@ -58,8 +58,9 @@ implement in other environments.  In order for a proposal to really
 take hold, it needs to be viable to implement througout the web stack.
 JSONSelect does (well, will do) two things to attempt to address this:
 
-  * provides a complete standalone grammar for selectors
-  * is specified in conformance *levels* so that a implementor may
+  * Represent selectors in strings, and provide a complete standalone
+    grammar (derived from CSS selectors).
+  * Be specified in conformance *levels* so that a implementor may
     incrementally integrate JSONSelect and have a clear way of expressing
     the subset supported ("JSONSelect 2 spoken here").
 
