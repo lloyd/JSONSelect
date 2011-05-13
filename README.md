@@ -9,8 +9,9 @@ JSON documents.
    means different implementations will order results identically, which
    improves conformance testing.
 
-2. Object keys are ids.
-
+2. Object keys are IDs.  Unlike HTML, ids are not unique in a document, so
+   selectors involving ids may match multiple nodes.
+   
 3. JSON type names map to JSON types.
 
 4. We may define an abbreviation/sloppy syntax which allows for the
