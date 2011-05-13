@@ -88,4 +88,8 @@ XML:
       <number id="weight">172</number>
     </object>
 
-6. There aren't any classes in JSONSelect.
+6. Attribute selector notation will be used to express constraints on
+   values.  (string matching, regex, etc).  It might be good to break this
+   work into JSONSelect 2, and leave JSONSelect 1 simple.
+
+7. There aren't any classes in JSONSelect.
