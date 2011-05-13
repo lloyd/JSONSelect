@@ -102,3 +102,4 @@ XML:
    
     string#"This is a json string\n"
     
+9. :nth-of-type() is maybe JSONSelect 2
