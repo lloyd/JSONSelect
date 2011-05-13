@@ -21,7 +21,7 @@ JSON documents.
    design JSONSelect is to define an algorithm to map JSON into XML,
    then apply CSS to the XML document.  Here's an example mapping:
 
-JSON:
+   JSON:
 
     {
         "name": {
@@ -55,7 +55,7 @@ JSON:
         weight: 172
     }
 
-XML: 
+   XML: 
 
     <object>
       <object id="name">
