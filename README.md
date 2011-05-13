@@ -33,7 +33,7 @@ JSON documents.
    character set similar to CSS IDs, but if a quote (`"`) follows a `#`,
    then we'll parse the ID as a JSON string:
    
-    string#"This is a json string\n"
+   `string#"This is a json string\n"`
     
 9. :*-of-type is maybe JSONSelect 2?
 
@@ -44,6 +44,7 @@ way of mapping JSON to XML, given that CSS applies to the later.  Here's
 a proposed mapping by example that fuels the design of JSONSelect:
 
 From JSON:
+
     {
         "name": {
             "first": "Lloyd",
