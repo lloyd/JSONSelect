@@ -20,9 +20,9 @@ JSON documents.
 5. CSS selectors apply to XML documents.  The most consistent way to
    design JSONSelect is to define an algorithm to map JSON into XML,
    then apply CSS to the XML document.  Here's an example mapping:
-
+   
    JSON:
-
+   
     {
         "name": {
             "first": "Lloyd",
@@ -54,9 +54,9 @@ JSON documents.
         ],
         weight: 172
     }
-
+   
    XML: 
-
+   
     <object>
       <object id="name">
         <string id="first">Lloyd</string>
@@ -102,4 +102,4 @@ JSON documents.
    
     string#"This is a json string\n"
     
-9. :nth-of-type() is maybe JSONSelect 2
+9. :*-of-type is maybe JSONSelect 2?
