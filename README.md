@@ -1,7 +1,7 @@
 JSONSelect defines a selector language similar to CSS intended for 
 JSON documents.
 
-## Design Notes
+## First Impressions on Design
 
 1. Implementations SHOULD order results using a depth first postorder
    traversal.  This allows streaming implementations to return
@@ -94,3 +94,11 @@ XML:
    work into JSONSelect 2, and leave JSONSelect 1 simple.
 
 7. There aren't any classes in JSONSelect.
+
+8. Full JSON strings must be possible to represent as IDs (`#`).  So we'll
+   have two forms in the id production, one without quotes that accepts a
+   character set similar to CSS IDs, but if a quote (`"`) follows a `#`,
+   then we'll parse the ID as a JSON string:
+   
+    string#"This is a json string\n"
+    
