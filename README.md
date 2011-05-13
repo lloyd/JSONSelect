@@ -19,10 +19,31 @@ JSON documents.
    
 5. CSS selectors apply to XML documents.  The most consistent way to
    design JSONSelect is to define an algorithm to map JSON into XML,
-   then apply CSS to the XML document.  Here's an example mapping:
+   then apply CSS to the XML document.  There's an [example mapping](#mapping)
+   lower down in this document.
+
+6. Attribute selector notation will be used to express constraints on
+   values.  (string matching, regex, etc).  It might be good to break this
+   work into JSONSelect 2, and leave JSONSelect 1 simple.
+
+7. There aren't any classes in JSONSelect.
+
+8. Full JSON strings must be possible to represent as IDs (`#`).  So we'll
+   have two forms in the id production, one without quotes that accepts a
+   character set similar to CSS IDs, but if a quote (`"`) follows a `#`,
+   then we'll parse the ID as a JSON string:
    
-   JSON:
-   
+    string#"This is a json string\n"
+    
+9. :*-of-type is maybe JSONSelect 2?
+
+## Example JSON to XML mapping <a name="mapping"></a>
+
+For the purposes of mapping CSS to JSON, it's useful to have a well defined
+way of mapping JSON to XML, given that CSS applies to the later.  Here's
+a proposed mapping by example that fuels the design of JSONSelect:
+
+From JSON:
     {
         "name": {
             "first": "Lloyd",
@@ -55,7 +76,7 @@ JSON documents.
         weight: 172
     }
    
-   XML: 
+To XML: 
    
     <object>
       <object id="name">
@@ -88,18 +109,3 @@ JSON documents.
       </array>
       <number id="weight">172</number>
     </object>
-
-6. Attribute selector notation will be used to express constraints on
-   values.  (string matching, regex, etc).  It might be good to break this
-   work into JSONSelect 2, and leave JSONSelect 1 simple.
-
-7. There aren't any classes in JSONSelect.
-
-8. Full JSON strings must be possible to represent as IDs (`#`).  So we'll
-   have two forms in the id production, one without quotes that accepts a
-   character set similar to CSS IDs, but if a quote (`"`) follows a `#`,
-   then we'll parse the ID as a JSON string:
-   
-    string#"This is a json string\n"
-    
-9. :*-of-type is maybe JSONSelect 2?
