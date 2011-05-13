@@ -27,7 +27,7 @@
         "whiskey",
         "wine"
     ],
-    weight: 172
+    "weight": 172
 }
 {
     "first": "Lloyd",
