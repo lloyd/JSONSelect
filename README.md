@@ -75,7 +75,8 @@ JSONSelect does (well, will do) two things to attempt to address this:
 2. Object keys are IDs.  Unlike HTML, ids are not unique in a document, so
    selectors involving ids may match multiple nodes.
    
-3. JSON type names map to JSON types.
+3. JSON type names map to selector types.  That is, rather than `h1`,
+   `tr`, and `pre`, we have `string`, `object`, and `array`
 
 4. We may define an abbreviation/sloppy syntax which allows for the
    omission of `#` when expressing object ids.
