@@ -43,6 +43,24 @@ $ JSONSelect.lex("foobar>",6);
 </div>
 
 <div class="test">
+Tyeps
+<pre class="doctest">
+$ JSONSelect.lex("string");
+[6, "string"]
+$ JSONSelect.lex("boolean");
+[7, "boolean"]
+$ JSONSelect.lex("null");
+[4, "null"]
+$ JSONSelect.lex("array");
+[5, "array"]
+$ JSONSelect.lex("object");
+[6, "object"]
+$ JSONSelect.lex("number");
+[6, "number"]
+</pre>
+</div>
+
+<div class="test">
 Whitespace
 <pre class="doctest">
 $ JSONSelect.lex("\r");

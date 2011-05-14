@@ -1,4 +1,5 @@
 (function() {
+    var typePat = /string|boolean|null|array|object|number/;
     var lex = function (str, off) {
         if (off == undefined) off = 0;
         while (str.length > off) {
@@ -12,6 +13,11 @@
                 do { off++; } while (off < str.length && "\t\r\n ".indexOf(str.charAt(off)) !== -1);
                 return [off, " "];
             default: 
+                var m;
+                // test for types
+                if (m = typePat.exec(str.substr(off))) {
+                    return [off + m[0].length, m[0]];
+                }
                 throw "unrecognized char in input";
             }
             // whitespace: space, nl, tab, cr
