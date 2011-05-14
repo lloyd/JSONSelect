@@ -35,5 +35,86 @@ The following are being considered:
   * `:not()`
   * `#foo + #bar` -- the adjacent sibling combinator
 
-## Grammar Draft
+## A Semi-Formal Grammar
 
+(Adapted from [CSS3](http://www.w3.org/TR/css3-selectors/#descendant-combinators) and
+ [json.org](http://json.org/))
+
+    selectors_group
+      : selector [ `,` selector ]*
+      ;
+    
+    selector
+      : simple_selector_sequence [ combinator simple_selector_sequence ]*
+      ;
+    
+    combinator
+      : `>` | `~` | \s+ 
+      ;
+    
+    simple_selector_sequence
+      /* why allow multiple HASH entities in the grammar? */
+      : [ type_selector | universal ]
+        [ hash | pseudo ]*
+      | [ hash | pseudo ]+
+      ;
+    
+    type_selector
+      : `object` | `array` | `number` | `string` | `boolean` | `null`
+      ;
+
+    universal
+      : '*'
+      ;
+
+    hash
+      : `#` name
+      | `#` json_string
+      ;
+    
+    pseudo
+      /* Note that pseudo-elements are restricted to one per selector and */
+      /* occur only in the last simple_selector_sequence. */
+      : `:` psuedo_class_name
+      | `:` psuedo_function_name `(` expression `)`
+      ;
+
+    psuedo_class_name
+      : `root` | `first-child` | `last-child` | `only-child`
+    
+    psuedo_function_name
+      : `nth-child` | `nth-last-child`
+
+    expression
+      /* expression is and of the form "an+b" */
+      : TODO
+      ;
+
+    json_string
+      : `"` json_chars* `"`
+      ;
+
+    json_chars
+      : any-Unicode-character-except-"-or-\-or-control-character
+      |  `\"`
+      |  `\\`
+      |  `\/`
+      |  `\b`
+      |  `\f`
+      |  `\n`
+      |  `\r`
+      |  `\t`
+      |   \u four-hex-digits 
+      ;
+
+    name
+      : nmchar+
+      ;
+
+    nmchar
+      /* NEEDSWORK */
+      : [_a-z0-9-]
+      | [^\0-\177]
+      | `\` [^\n\r\f0-9a-f]
+      | `\` [0-9a-f]{1,6} (\r\n|[ \n\r\t\f])?
+      ;
