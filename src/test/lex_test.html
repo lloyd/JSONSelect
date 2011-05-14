@@ -29,8 +29,6 @@ $ JSONSelect.lex("#");
 [1, "#"]
 $ JSONSelect.lex('"');
 [1, "\""]
-$ JSONSelect.lex(":");
-[1, ":"]
 </pre>
 </div>
 
@@ -73,6 +71,19 @@ $ JSONSelect.lex(" ");
 [1, " "]
 $ JSONSelect.lex("     \t   \r\n  !");
 [13, " "]
+</pre>
+
+<div class="test">
+psuedo classes
+<pre class="doctest">
+$ JSONSelect.lex(":root");
+[5, ":root"]
+$ JSONSelect.lex(":first-child");
+[12, ":first-child"]
+$ JSONSelect.lex(":last-child");
+[11, ":last-child"]
+$ JSONSelect.lex(":only-child");
+[11, ":only-child"]
 </pre>
 </div>
 
