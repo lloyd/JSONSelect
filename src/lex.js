@@ -7,9 +7,15 @@
             case 0x22: case 0x23: case 0x2a: case 0x2c:
             case 0x3a: case 0x3e: case 0x7e: 
                 return [off+1, str.charAt(off)];
-            default:
+            // whitespace: space, nl, tab, cr, represented as the space char
+            case 0x20: case 0x0a: case 0x0d: case 0x09:
+                do { off++; } while (off < str.length && "\t\r\n ".indexOf(str.charAt(off)) !== -1);
+                return [off, " "];
+            default: 
                 throw "unrecognized char in input";
             }
+            // whitespace: space, nl, tab, cr
+
         }
     };
 

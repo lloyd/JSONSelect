@@ -42,6 +42,21 @@ $ JSONSelect.lex("foobar>",6);
 </pre>
 </div>
 
+<div class="test">
+Whitespace
+<pre class="doctest">
+$ JSONSelect.lex("\r");
+[1, " "]
+$ JSONSelect.lex("\n");
+[1, " "]
+$ JSONSelect.lex("\t");
+[1, " "]
+$ JSONSelect.lex(" ");
+[1, " "]
+$ JSONSelect.lex("     \t   \r\n  !");
+[13, " "]
+</pre>
+</div>
 
 
   </body>
