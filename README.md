@@ -38,7 +38,7 @@ The benefits of a CSS-like language for JSON objects are foremost a matter
 of *developer ergonomics*: Given that people working with web
 technologies are likely to already be familiar with CSS selectors, a
 syntactically similar way of selecting nodes from JSON documents should
-be easy to learn and apply.  Further, a selector language can afford 
+be easy to learn and apply.  More generally, a selector language can afford 
 terse and readable code when accessing nested data from JSON objects.
 
 Next, *efficiency*.  Much of the web nowadays is about parsing JSON
