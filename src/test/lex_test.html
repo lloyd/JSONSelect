@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>JSONSelect JS lex tests</title>
+    <link rel="stylesheet" type="text/css" href="../doctestjs/doctest.css" />
+    <script src="../doctestjs/doctest.js"></script>
+    <script src="../lex.js"></script>
+  </head>
+  <body>
+
+<div>
+  <button onclick="doctest()" type="button">run tests</button>
+  <pre id="doctestOutput"></pre>
+</div>
+
+    <h2> Tests of the JSONSelect lexer </h2>
+
+<div class="test">
+Simple tokens
+<pre class="doctest">
+$ JSONSelect.lex(">");
+[1, ">"]
+$ JSONSelect.lex("~");
+[1, "~"]
+$ JSONSelect.lex("*");
+[1, "*"]
+$ JSONSelect.lex(",");
+[1, ","]
+$ JSONSelect.lex("#");
+[1, "#"]
+$ JSONSelect.lex('"');
+[1, "\""]
+$ JSONSelect.lex(":");
+[1, ":"]
+</pre>
+</div>
+
+<div class="test">
+Offsets
+<pre class="doctest">
+$ JSONSelect.lex("foobar>",6);
+[7, ">"]
+</pre>
+</div>
+
+
+
+  </body>
+</html>
