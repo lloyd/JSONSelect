@@ -8,7 +8,7 @@ but with some differences.
   * `string` -- type selectors
   * `*` -- the universal type selector
   * `#foo` -- ID selectors, which match against object keys  
-  * `#"a string" -- ID selectors with JSON-string quoted ids
+  * `#"a string"` -- ID selectors with JSON-string quoted ids
   * Several structural psuedo-classes:
     * `:root` - the root psuedo class
     * `:nth-child()` - the nth-child class that matches object
