@@ -27,8 +27,6 @@ $ JSONSelect.lex(",");
 [1, ","]
 $ JSONSelect.lex("#");
 [1, "#"]
-$ JSONSelect.lex('"');
-[1, "\""]
 </pre>
 </div>
 
@@ -84,6 +82,20 @@ $ JSONSelect.lex(":last-child");
 [11, ":last-child"]
 $ JSONSelect.lex(":only-child");
 [11, ":only-child"]
+</pre>
+</div>
+
+<div class="test">
+json strings
+<pre class="doctest">
+$ JSONSelect.lex('"foo bar baz"');
+[13, 0, "foo bar baz"]
+$ JSONSelect.lex('"\\u0020"');
+[8, 0, " "]
+$ JSONSelect.lex('\"not terminated');
+Error: unclosed json string
+$ JSONSelect.lex('"invalid escape: \\y"');
+Error: invalid json string
 </pre>
 </div>
 
