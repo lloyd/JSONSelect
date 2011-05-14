@@ -23,8 +23,7 @@ but with some differences.
   * `object string` -- a descentant combinator
   * `#bar > string` -- a child combinator
   * `boolean#enabled ~ #email` -- a general sibling operator,
-    *perhaps without the requirement that the first preceeds the
-    second*
+    *perhaps without the ordering requirement*
 
 The following are being considered:
 
