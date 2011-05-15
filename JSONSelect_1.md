@@ -108,13 +108,24 @@ The following are being considered:
       ;
 
     name
-      : nmchar+
+      : nmstart nmchar*
+      ;
+
+    nmstart
+      : escape | [_a-zA-Z] | nonascii
       ;
 
     nmchar
-      /* NEEDSWORK */
-      : [_a-z0-9-]
-      | [^\0-\177]
-      | `\` [^\n\r\f0-9a-f]
-      | `\` [0-9a-f]{1,6} (\r\n|[ \n\r\t\f])?
+      : [_a-zA-Z0-9-]
+      | escape
+      | nonascii
       ;
+ 
+    escape 
+      : \\[^\r\n\f0-9a-fA-F]
+      ;
+
+    nonascii
+      : [^\0-0177]
+      ;
+
