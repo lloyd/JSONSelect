@@ -92,10 +92,22 @@ $ JSONSelect.lex('"foo bar baz"');
 [13, 0, "foo bar baz"]
 $ JSONSelect.lex('"\\u0020"');
 [8, 0, " "]
-$ JSONSelect.lex('\"not terminated');
+$ JSONSelect.lex('\"not terminated');E
 Error: unclosed json string
 $ JSONSelect.lex('"invalid escape: \\y"');
 Error: invalid json string
+</pre>
+</div>
+
+<div class="test">
+identifiers (like after '#')
+<pre class="doctest">
+$ JSONSelect.lex("foo");
+[3, 0, "foo"]
+$ JSONSelect.lex("foo\\ bar");
+[8, 0, "foo bar"]
+$ JSONSelect.lex("_aB129bcde-\\:foo\\@$");
+[18, 0, "_aB129bcde-:foo@"]
 </pre>
 </div>
 
