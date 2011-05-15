@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>JSONSelect JS parser tests</title>
+    <link rel="stylesheet" type="text/css" href="../doctestjs/doctest.css" />
+    <script src="../doctestjs/doctest.js"></script>
+    <script src="../lex.js"></script>
+    <script src="../parse.js"></script>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  </head>
+  <body>
+
+<div>
+  <button onclick="doctest()" type="button">run tests</button>
+  <pre id="doctestOutput"></pre>
+</div>
+
+    <h2> Tests of the JSONSelect parser </h2>
+
+<div class="test">
+Simple tokens
+<pre class="doctest">
+$ JSONSelect._parse("#foo #bar");
+...
+$ JSONSelect._parse("string#foo:last-child");
+...
+</pre>
+</div>
+
+  </body>
+</html>
