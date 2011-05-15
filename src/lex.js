@@ -56,5 +56,5 @@
     // expose
     if (!window.JSONSelect) window.JSONSelect = {} ;
 
-    window.JSONSelect.lex = lex;
+    window.JSONSelect._lex = lex;
 })();

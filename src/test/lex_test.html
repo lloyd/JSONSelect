@@ -18,15 +18,15 @@
 <div class="test">
 Simple tokens
 <pre class="doctest">
-$ JSONSelect.lex(">");
+$ JSONSelect._lex(">");
 [1, ">"]
-$ JSONSelect.lex("~");
+$ JSONSelect._lex("~");
 [1, "~"]
-$ JSONSelect.lex("*");
+$ JSONSelect._lex("*");
 [1, "*"]
-$ JSONSelect.lex(",");
+$ JSONSelect._lex(",");
 [1, ","]
-$ JSONSelect.lex("#");
+$ JSONSelect._lex("#");
 [1, "#"]
 </pre>
 </div>
@@ -34,7 +34,7 @@ $ JSONSelect.lex("#");
 <div class="test">
 Offsets
 <pre class="doctest">
-$ JSONSelect.lex("foobar>",6);
+$ JSONSelect._lex("foobar>",6);
 [7, ">"]
 </pre>
 </div>
@@ -42,17 +42,17 @@ $ JSONSelect.lex("foobar>",6);
 <div class="test">
 Tyeps
 <pre class="doctest">
-$ JSONSelect.lex("string");
+$ JSONSelect._lex("string");
 [6, "string"]
-$ JSONSelect.lex("boolean");
+$ JSONSelect._lex("boolean");
 [7, "boolean"]
-$ JSONSelect.lex("null");
+$ JSONSelect._lex("null");
 [4, "null"]
-$ JSONSelect.lex("array");
+$ JSONSelect._lex("array");
 [5, "array"]
-$ JSONSelect.lex("object");
+$ JSONSelect._lex("object");
 [6, "object"]
-$ JSONSelect.lex("number");
+$ JSONSelect._lex("number");
 [6, "number"]
 </pre>
 </div>
@@ -60,28 +60,28 @@ $ JSONSelect.lex("number");
 <div class="test">
 Whitespace
 <pre class="doctest">
-$ JSONSelect.lex("\r");
+$ JSONSelect._lex("\r");
 [1, " "]
-$ JSONSelect.lex("\n");
+$ JSONSelect._lex("\n");
 [1, " "]
-$ JSONSelect.lex("\t");
+$ JSONSelect._lex("\t");
 [1, " "]
-$ JSONSelect.lex(" ");
+$ JSONSelect._lex(" ");
 [1, " "]
-$ JSONSelect.lex("     \t   \r\n  !");
+$ JSONSelect._lex("     \t   \r\n  !");
 [13, " "]
 </pre>
 
 <div class="test">
 psuedo classes
 <pre class="doctest">
-$ JSONSelect.lex(":root");
+$ JSONSelect._lex(":root");
 [5, ":root"]
-$ JSONSelect.lex(":first-child");
+$ JSONSelect._lex(":first-child");
 [12, ":first-child"]
-$ JSONSelect.lex(":last-child");
+$ JSONSelect._lex(":last-child");
 [11, ":last-child"]
-$ JSONSelect.lex(":only-child");
+$ JSONSelect._lex(":only-child");
 [11, ":only-child"]
 </pre>
 </div>
@@ -89,13 +89,13 @@ $ JSONSelect.lex(":only-child");
 <div class="test">
 json strings
 <pre class="doctest">
-$ JSONSelect.lex('"foo bar baz"');
+$ JSONSelect._lex('"foo bar baz"');
 [13, 0, "foo bar baz"]
-$ JSONSelect.lex('"\\u0020"');
+$ JSONSelect._lex('"\\u0020"');
 [8, 0, " "]
-$ JSONSelect.lex('\"not terminated');E
+$ JSONSelect._lex('\"not terminated');E
 Error: unclosed json string
-$ JSONSelect.lex('"invalid escape: \\y"');
+$ JSONSelect._lex('"invalid escape: \\y"');
 Error: invalid json string
 </pre>
 </div>
@@ -103,11 +103,11 @@ Error: invalid json string
 <div class="test">
 identifiers (like after '#')
 <pre class="doctest">
-$ JSONSelect.lex("foo");
+$ JSONSelect._lex("foo");
 [3, 0, "foo"]
-$ JSONSelect.lex("foo\\ bar");
+$ JSONSelect._lex("foo\\ bar");
 [8, 0, "foo bar"]
-$ JSONSelect.lex("_aB129bcde-\\:foo\\@$");
+$ JSONSelect._lex("_aB129bcde-\\:foo\\@$");
 [18, 0, "_aB129bcde-:foo@"]
 </pre>
 </div>
@@ -115,7 +115,7 @@ $ JSONSelect.lex("_aB129bcde-\\:foo\\@$");
 <div class="test">
 non-ascii
 <pre class="doctest">
-$ JSONSelect.lex("обичам\\ те\\!");
+$ JSONSelect._lex("обичам\\ те\\!");
 [12, 0, "обичам те!"]
 </pre>
 </div>
