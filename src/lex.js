@@ -2,7 +2,7 @@
     var typePat = /^(?:string|boolean|null|array|object|number)/;
     var psuedoClassPat = /^(?:root|first-child|last-child|only-child)/;
     var jsonStrPat = /^(?:\"(?:[^\\]|\\[^\"])*\")/;
-    var identPat = /^(?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9-]|(?:\\[^\r\n\f0-9a-fA-F]))*/;
+    var identPat = /^(?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*/;
     var lex = function (str, off) {
         if (off == undefined) off = 0;
         while (str.length > off) {
