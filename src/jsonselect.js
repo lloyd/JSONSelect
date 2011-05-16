@@ -37,14 +37,16 @@
         var m = pat.exec(str.substr(off));
         if (!m) return undefined;
         off+=m[0].length;
-        if (m[1]) return [off, " "];
-        if (m[2]) return [off, m[0]];
-        else if (m[3]) return [off, toks.typ, m[0]];
-        else if (m[4]) return [off, toks.psc, m[0]];
+        var a;
+        if (m[1]) a = [off, " "];
+        else if (m[2]) a = [off, m[0]];
+        else if (m[3]) a = [off, toks.typ, m[0]];
+        else if (m[4]) a = [off, toks.psc, m[0]];
         else if (m[5]) te("upc");
-        else if (m[6]) return [off, toks.str, jsonParse(m[0])];
+        else if (m[6]) a = [off, toks.str, jsonParse(m[0])];
         else if (m[7]) te("ujs");
-        else if (m[8]) return [off, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
+        else if (m[8]) a = [off, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
+        return a;
     };
 
     // THE PARSER
