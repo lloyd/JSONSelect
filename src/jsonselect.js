@@ -1,7 +1,8 @@
 /*! Copyright (c) 2011, Lloyd Hilaiel, ISC License */
 (function() {
     var w = window;
-    var jsonParse = (w.JSON ? w.JSON.parse : w.eval);
+    var jp = (w.JSON ? w.JSON.parse : w.eval);
+    function jsonParse(s) { try { return jp(s); } catch(e) { te("ijs"); }; }
 
     // emitted error codes.  Strip this table for an, uh, "optimized build"
     var _es = {}; // overshadow any globals when the table is stripped
@@ -30,60 +31,20 @@
         str: 4, // string
     };
 
-    var tPat = /^(?:string|boolean|null|array|object|number)/;
-    var pcPat = /^(?:root|first-child|last-child|only-child)/;
-    var jsPat = /^(?:\"(?:[^\\]|\\[^\"])*\")/;
-    var iPat = /^(?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*/;
+    var pat = /^(?:([\r\n\t\ ]+)|([*#,>])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
     var lex = function (str, off) {
-        if (off == undefined) off = 0;
-        while (str.length > off) {
-            switch(str.charCodeAt(off)) {
-            // for simple 1 char tokens, we'll let them represent themselves.
-            case 0x23: case 0x2a: case 0x2c:
-            case 0x3e: case 0x7e:
-                return [off+1, str.charAt(off)];
-            // whitespace: space, nl, tab, cr, represented as the space char
-            case 0x20: case 0x0a: case 0x0d: case 0x09:
-                do { off++; } while (off < str.length && "\t\r\n ".indexOf(str.charAt(off)) !== -1);
-                return [off, " "];
-            // colon ':' indicates psuedo class
-            case 0x3a:
-                var m;
-                var ss = str.substr(off+1);
-                if (m = pcPat.exec(ss)) {
-                    return [off + 1 + m[0].length, toks.psc, ":" + m[0]];
-                } else if (false) {
-                    te("pcny");
-                }
-                te("upc");
-            // quote '"' indicates embedded JSON string
-            case 0x22:
-                var m;
-                if (m = jsPat.exec(str.substr(off))) {
-                    try {
-                        // using JSON parsing directly here is bad, it kills our
-                        // portability.  Can we safely use eval considering we know
-                        // this is a value enclosed in quotes?
-                        return [off + m[0].length, toks.str, jsonParse(m[0])];
-                    } catch(e) {
-                        te("ijs");
-                    }
-                }
-                te("ujs");
-            default:
-                var m;
-                var ss = str.substr(off);
-                // test for types
-                if (m = tPat.exec(ss)) {
-                    return [off + m[0].length, toks.typ, m[0]];
-                }
-                // test for idents
-                else if (m = iPat.exec(ss)) {
-                    return [off + m[0].length, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
-                }
-                te("uc");
-            }
-        }
+        if (!off) off = 0;
+        var m = pat.exec(str.substr(off));
+        if (!m) return undefined;
+        off+=m[0].length;
+        if (m[1]) return [off, " "];
+        if (m[2]) return [off, m[0]];
+        else if (m[3]) return [off, toks.typ, m[0]];
+        else if (m[4]) return [off, toks.psc, m[0]];
+        else if (m[5]) te("upc");
+        else if (m[6]) return [off, toks.str, jsonParse(m[0])];
+        else if (m[7]) te("ujs");
+        else if (m[8]) return [off, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
     };
 
     // THE PARSER

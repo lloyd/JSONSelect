@@ -20,8 +20,6 @@ Simple tokens
 <pre class="doctest">
 $ JSONSelect._lex(">");
 [1, ">"]
-$ JSONSelect._lex("~");
-[1, "~"]
 $ JSONSelect._lex("*");
 [1, "*"]
 $ JSONSelect._lex(",");
@@ -93,7 +91,7 @@ $ JSONSelect._lex('"foo bar baz"');
 [13, 4, "foo bar baz"]
 $ JSONSelect._lex('"\\u0020"');
 [8, 4, " "]
-$ JSONSelect._lex('\"not terminated');E
+$ JSONSelect._lex('\"not terminated');
 Error: unclosed json string
 $ JSONSelect._lex('"invalid escape: \\y"');
 Error: invalid json string
