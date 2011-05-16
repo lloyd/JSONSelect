@@ -2,6 +2,8 @@
     var w = window;
     if (!w.JSONSelect) w.JSONSelect = {} ;
 
+    var jsonParse = (window.JSON ? window.JSON.parse : window.eval);
+
     var toks = w.JSONSelect._toks = {
         psc: 1, // pseudo class
         psf: 2, // pseudo class function
@@ -25,6 +27,7 @@
             case 0x20: case 0x0a: case 0x0d: case 0x09:
                 do { off++; } while (off < str.length && "\t\r\n ".indexOf(str.charAt(off)) !== -1);
                 return [off, " "];
+            // colon ':' indicates psuedo class
             case 0x3a:
                 var m;
                 var ss = str.substr(off+1);
@@ -34,11 +37,15 @@
                     throw "psuedo class functions not yet supported";
                 }
                 throw "unrecognized psuedo class";
+            // quote '"' indicates embedded JSON string
             case 0x22:
                 var m;
                 if (m = jsonStrPat.exec(str.substr(off))) {
                     try {
-                        return [off + m[0].length, toks.str, JSON.parse(m[0])];
+                        // using JSON parsing directly here is bad, it kills our
+                        // portability.  Can we safely use eval considering we know
+                        // this is a value enclosed in quotes?
+                        return [off + m[0].length, toks.str, jsonParse(m[0])];
                     } catch(e) {
                         throw "invalid json string";
                     }
@@ -57,8 +64,6 @@
                 }
                 throw "unrecognized char";
             }
-            // whitespace: space, nl, tab, cr
-
         }
     };
 
