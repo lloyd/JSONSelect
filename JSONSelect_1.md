@@ -2,7 +2,7 @@
 
 ## Features
 
-JSONSelect level 1 ncludes the following constructs, mostly from CSS3
+JSONSelect level 1 includes the following constructs, mostly from CSS3
 but with some differences.
 
   * `string` -- type selectors
