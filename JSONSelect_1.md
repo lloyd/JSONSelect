@@ -20,7 +20,7 @@ but with some differences.
     * `:empty` - the empty psuedo class matching arrays or objects
       without children
   * `string, number` -- a grouping operator
-  * `object string` -- a descentant combinator
+  * `object string` -- a descendant combinator
   * `#bar > string` -- a child combinator
 
 
