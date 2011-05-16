@@ -20,11 +20,11 @@
 Selectors
 <pre class="doctest">
 $ JSONSelect._parse("#foo");
-{id: "foo"}
+[{id: "foo"}]
 $ JSONSelect._parse('#" foo "');
-{id: " foo "}
+[{id: " foo "}]
 $ JSONSelect._parse("string#foo:last-child");
-{id: "foo", pc: ":last-child", type: "string"}
+[{id: "foo", pc: ":last-child", type: "string"}]
 $ JSONSelect._parse("string#foo#bar");
 Error: multiple ids not allowed
 $ JSONSelect._parse("string#foo:first-child#bar");
@@ -36,11 +36,34 @@ Error: string required after '#'
 $ JSONSelect._parse("string:bogus");
 Error: unrecognized psuedo class
 $ JSONSelect._parse("string#xxx\\@yyy");
-{id: "xxx@yyy", type: "string"}
+[{id: "xxx@yyy", type: "string"}]
 $ JSONSelect._parse(" ");
 Error: selector expected
 $ JSONSelect._parse("");
 Error: selector expected
+</pre>
+</div>
+
+<div class="test">
+Combinators
+<pre class="doctest">
+$ JSONSelect._parse("#foo #bar");
+[{id: "foo"}, {id: "bar"}]
+$ JSONSelect._parse("string#foo , number#foo");
+[",", [{id: "foo", type: "string"}], [{id: "foo", type: "number"}]]
+$ JSONSelect._parse("string > #foo number#bar");
+[{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}]
+$ JSONSelect._parse("string > #foo number#bar, object");
+[",", [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}], [{type: "object"}]]
+$ JSONSelect._parse("string > #foo number#bar, object, string, #\"baz bing\", :root");
+[
+  ",",
+  [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}],
+  [{type: "object"}],
+  [{type: "string"}],
+  [{id: "baz bing"}],
+  [{pc: ":root"}]
+]
 </pre>
 </div>
 
