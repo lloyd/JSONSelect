@@ -1,4 +1,14 @@
 (function() {
+    var w = window;
+    if (!w.JSONSelect) w.JSONSelect = {} ;
+
+    var toks = w.JSONSelect._toks = {
+        psc: 1, // pseudo class
+        psf: 2, // pseudo class function
+        typ: 3, // type
+        str: 4, // string
+    };
+
     var typePat = /^(?:string|boolean|null|array|object|number)/;
     var psuedoClassPat = /^(?:root|first-child|last-child|only-child)/;
     var jsonStrPat = /^(?:\"(?:[^\\]|\\[^\"])*\")/;
@@ -19,17 +29,16 @@
                 var m;
                 var ss = str.substr(off+1);
                 if (m = psuedoClassPat.exec(ss)) {
-                    return [off + 1 + m[0].length, ":" + m[0]];
+                    return [off + 1 + m[0].length, toks.psc, ":" + m[0]];
                 } else if (false) {
-                    // XXX: pseudo functions
+                    throw "psuedo class functions not yet supported";
                 }
                 throw "unrecognized psuedo class";
             case 0x22:
                 var m;
                 if (m = jsonStrPat.exec(str.substr(off))) {
                     try {
-                        // XXX: we need numeric token codes
-                        return [off + m[0].length, 0, JSON.parse(m[0])];
+                        return [off + m[0].length, toks.str, JSON.parse(m[0])];
                     } catch(e) {
                         throw "invalid json string";
                     }
@@ -40,11 +49,11 @@
                 var ss = str.substr(off);
                 // test for types
                 if (m = typePat.exec(ss)) {
-                    return [off + m[0].length, m[0]];
+                    return [off + m[0].length, toks.typ, m[0]];
                 }
                 // test for idents
                 else if (m = identPat.exec(ss)) {
-                    return [off + m[0].length, 0, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
+                    return [off + m[0].length, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
                 }
                 throw "unrecognized char";
             }
@@ -53,8 +62,5 @@
         }
     };
 
-    // expose
-    if (!window.JSONSelect) window.JSONSelect = {} ;
-
-    window.JSONSelect._lex = lex;
+    w.JSONSelect._lex = lex;
 })();

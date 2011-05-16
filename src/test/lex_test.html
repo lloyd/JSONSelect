@@ -40,20 +40,20 @@ $ JSONSelect._lex("foobar>",6);
 </div>
 
 <div class="test">
-Tyeps
+Types
 <pre class="doctest">
 $ JSONSelect._lex("string");
-[6, "string"]
+[6, 3, "string"]
 $ JSONSelect._lex("boolean");
-[7, "boolean"]
+[7, 3, "boolean"]
 $ JSONSelect._lex("null");
-[4, "null"]
+[4, 3, "null"]
 $ JSONSelect._lex("array");
-[5, "array"]
+[5, 3, "array"]
 $ JSONSelect._lex("object");
-[6, "object"]
+[6, 3, "object"]
 $ JSONSelect._lex("number");
-[6, "number"]
+[6, 3, "number"]
 </pre>
 </div>
 
@@ -76,13 +76,13 @@ $ JSONSelect._lex("     \t   \r\n  !");
 psuedo classes
 <pre class="doctest">
 $ JSONSelect._lex(":root");
-[5, ":root"]
+[5, 1, ":root"]
 $ JSONSelect._lex(":first-child");
-[12, ":first-child"]
+[12, 1, ":first-child"]
 $ JSONSelect._lex(":last-child");
-[11, ":last-child"]
+[11, 1, ":last-child"]
 $ JSONSelect._lex(":only-child");
-[11, ":only-child"]
+[11, 1, ":only-child"]
 </pre>
 </div>
 
@@ -90,9 +90,9 @@ $ JSONSelect._lex(":only-child");
 json strings
 <pre class="doctest">
 $ JSONSelect._lex('"foo bar baz"');
-[13, 0, "foo bar baz"]
+[13, 4, "foo bar baz"]
 $ JSONSelect._lex('"\\u0020"');
-[8, 0, " "]
+[8, 4, " "]
 $ JSONSelect._lex('\"not terminated');E
 Error: unclosed json string
 $ JSONSelect._lex('"invalid escape: \\y"');
@@ -104,11 +104,11 @@ Error: invalid json string
 identifiers (like after '#')
 <pre class="doctest">
 $ JSONSelect._lex("foo");
-[3, 0, "foo"]
+[3, 4, "foo"]
 $ JSONSelect._lex("foo\\ bar");
-[8, 0, "foo bar"]
+[8, 4, "foo bar"]
 $ JSONSelect._lex("_aB129bcde-\\:foo\\@$");
-[18, 0, "_aB129bcde-:foo@"]
+[18, 4, "_aB129bcde-:foo@"]
 </pre>
 </div>
 
@@ -116,7 +116,7 @@ $ JSONSelect._lex("_aB129bcde-\\:foo\\@$");
 non-ascii
 <pre class="doctest">
 $ JSONSelect._lex("обичам\\ те\\!");
-[12, 0, "обичам те!"]
+[12, 4, "обичам те!"]
 </pre>
 </div>
 

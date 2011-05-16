@@ -17,14 +17,34 @@
     <h2> Tests of the JSONSelect parser </h2>
 
 <div class="test">
-Simple tokens
+Selectors
 <pre class="doctest">
-$ JSONSelect._parse("#foo #bar");
-...
+$ JSONSelect._parse("#foo");
+{id: "foo"}
+$ JSONSelect._parse('#" foo "');
+{id: " foo "}
 $ JSONSelect._parse("string#foo:last-child");
-...
+{id: "foo", pc: ":last-child", type: "string"}
+$ JSONSelect._parse("string#foo#bar");
+Error: multiple ids not allowed
+$ JSONSelect._parse("string#foo:first-child#bar");
+Error: multiple ids not allowed
+$ JSONSelect._parse("string:last-child#foo:first-child#bar");
+Error: multiple pseudo classes (:xxx) not allowed
+$ JSONSelect._parse("string#");
+Error: string required after '#'
+$ JSONSelect._parse("string:bogus");
+Error: unrecognized psuedo class
+$ JSONSelect._parse("string#xxx\\@yyy");
+{id: "xxx@yyy", type: "string"}
+$ JSONSelect._parse(" ");
+Error: selector expected
+$ JSONSelect._parse("");
+Error: selector expected
 </pre>
 </div>
 
   </body>
 </html>
+
+
