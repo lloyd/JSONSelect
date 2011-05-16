@@ -23,7 +23,7 @@ could just do this:
           party: "Republican"
         }
       ]
-    > obj.select("#candidates #name #last");
+    > JSONSelect.match("#candidates #name #last", obj);
     [ "Obama", "McCain" ]
 
 ## The Pitch
