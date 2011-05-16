@@ -2,12 +2,10 @@
     var lex = JSONSelect._lex;
     var toks = JSONSelect._toks;
     var parse = function (str) {
-        var am = undefined;
-        var a = [];
-        var off = 0;
-        var s = parse_selector(str, 0);
-        a.push(s[1]);
+        var am = undefined, a = [], off = 0;
         while (true) {
+            var s = parse_selector(str, off);
+            a.push(s[1]);
             s = lex(str, off = s[0]);
             if (s && s[1] === ' ') s = lex(str, off = s[0]);
             if (!s) break;
@@ -21,9 +19,6 @@
                 a = [];
                 off = s[0];
             }
-            var s = parse_selector(str, off);
-            a.push(s[1]);
-            off = s[0];
         }
         if (am) am.push(a);
         return am ? am : a;
