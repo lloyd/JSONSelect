@@ -1,8 +1,8 @@
 <html>
   <head>
     <title>JSONSelect JS matching tests</title>
-    <link rel="stylesheet" type="text/css" href="../doctestjs/doctest.css" />
-    <script src="../doctestjs/doctest.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/doctest.css" />
+    <script src="js/doctest.js"></script>
     <script src="../jsonselect.js"></script>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   </head>
@@ -18,6 +18,12 @@
 <div class="test">
 Types
 <pre class="doctest">
+$ JSONSelect.match("null", null);
+[null]
+$ JSONSelect.match("array", { 1: [], 2: [] });
+[[], []]
+$ JSONSelect.match("object", [ {}, {} ]);
+[{}, {}]
 $ JSONSelect.match("string", [ "a", 1, true, null, false, "b", 3.1415, "c" ] );
 ["a", "b", "c"]
 $ JSONSelect.match("boolean", [ "a", 1, true, null, false, "b", 3.1415, "c" ] );
@@ -49,6 +55,15 @@ $ JSONSelect.match("#foo #bar", {foo: { baz: { bar: 4 }, bar: 2 }, bar: 3});
 </pre>
 </div>
 
+<div class="test">
+Grouping
+<pre class="doctest">
+$ JSONSelect.match("number,boolean", [ "a", 1, true, null, false, "b", 3.1415, "c" ] );
+[1, true, false, 3.1415]
+$ JSONSelect.match("number,boolean,null", [ "a", 1, true, null, false, "b", 3.1415, "c" ] );
+[1, true, null, false, 3.1415]
+</pre>
+</div>
 
   </body>
 </html>

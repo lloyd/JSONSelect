@@ -1,4 +1,7 @@
 /*! Copyright (c) 2011, Lloyd Hilaiel, ISC License */
+/*
+ * This is the JSONSelect reference implementation, in javascript.
+ */
 (function() {
     var w = window;
     var jp = (w.JSON ? w.JSON.parse : w.eval);
@@ -122,6 +125,7 @@
     }
 
     function mytypeof(o) {
+        if (o === null) return 'null';
         var to = typeof o;
         if (to === 'object' && isArray(o)) to = 'array';
         return to;
