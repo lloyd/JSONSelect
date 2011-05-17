@@ -117,13 +117,58 @@
 
     // THE EVALUATOR
 
-    function forEach(sel, obj, fun) {
-        // XXX
+    function isArray(o) {
+        return Object.prototype.toString.call(o) === '[object Array]';
+    }
+
+    function mytypeof(o) {
+        var to = typeof o;
+        if (to === 'object' && isArray(o)) to = 'array';
+        return to;
+    }
+
+    function mn(node, sel, id) {
+        var sels = [];
+        var cs = (sel[0] === '>') ? sel[1] : sel[0];
+        var m = true;
+        if (cs.type) m = m && (cs.type === mytypeof(node));
+        if (cs.id)   m = m && (cs.id === id);
+
+        // should we repeat this selector for descendants?
+        if (sel[0] !== '>' && sel[0].pc !== ":root") sels.push(sel);
+
+        if (m) {
+            // is there a fragment that we should pass down?
+            if (sel[0] === '>') { if (sel.length > 2) { m = false; sels.push(sel.slice(2)); } }
+            else if (sel.length > 1) { m = false; sels.push(sel.slice(1)); }
+        }
+
+        return [m, sels];
+    }
+
+    function forEach(sel, obj, fun, id) {
+        var a = (sel[0] === ',') ? sel.slice(1) : [sel];
+        var a0 = [];
+        var called = false;
+        for (var i = 0; i < a.length; i++) {
+            var x = mn(obj, a[i], id);
+            if (!called && x[0]) { called = true; fun(obj); }
+            for (var j = 0; j < x[1].length; j++) a0.push(x[1][j]);
+        }
+        if (a0.length && typeof obj === 'object') {
+            if (a0.length >= 1) a0.unshift(",");
+            if (isArray(obj)) {
+                for (var i = 0; i < obj.length; i++) forEach(a0, obj[i], fun);
+            } else {
+                for (var k in obj) if (obj.hasOwnProperty(k)) forEach(a0, obj[k], fun, k);
+            }
+        }
     };
 
     function match(sel, obj) {
-        // XXX
-        return [];
+        var a = [];
+        forEach(sel, obj, function(x) { a.push(x); });
+        return a;
     };
 
     function compile(sel) {
