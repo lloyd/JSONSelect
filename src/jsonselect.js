@@ -179,7 +179,7 @@
         return {
             sel: parse(sel),
             match: function(obj){return match(this.sel, obj)},
-            forEach: function(obj, fun) { return match(this.sel, obj, fun) }
+            forEach: function(obj, fun) { return forEach(this.sel, obj, fun) }
         };
     }
 
