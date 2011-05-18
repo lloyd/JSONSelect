@@ -153,10 +153,10 @@
     function forEach(sel, obj, fun, id) {
         var a = (sel[0] === ',') ? sel.slice(1) : [sel];
         var a0 = [];
-        var called = false;
+        var call = false;
         for (var i = 0; i < a.length; i++) {
             var x = mn(obj, a[i], id);
-            if (!called && x[0]) { called = true; fun(obj); }
+            if (x[0]) call = true;
             for (var j = 0; j < x[1].length; j++) a0.push(x[1][j]);
         }
         if (a0.length && typeof obj === 'object') {
@@ -167,6 +167,7 @@
                 for (var k in obj) if (obj.hasOwnProperty(k)) forEach(a0, obj[k], fun, k);
             }
         }
+        if (call && fun) fun(obj);
     };
 
     function match(sel, obj) {
