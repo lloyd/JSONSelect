@@ -131,7 +131,7 @@
         return to;
     }
 
-    function mn(node, sel, id, num) {
+    function mn(node, sel, id, num, tot) {
         var sels = [];
         var cs = (sel[0] === '>') ? sel[1] : sel[0];
         var m = true;
@@ -139,7 +139,7 @@
         if (cs.id)   m = m && (cs.id === id);
         if (m && cs.pc) {
             if (cs.pc === ":first-child") m = (num === 0);
-            else if (cs.pc === ":last-child") m = m; // XXX
+            else if (cs.pc === ":last-child") m = (num === (tot - 1));
         }
 
         // should we repeat this selector for descendants?
@@ -154,22 +154,28 @@
         return [m, sels];
     }
 
-    function forEach(sel, obj, fun, id, num) {
+    function forEach(sel, obj, fun, id, num, tot) {
         var a = (sel[0] === ',') ? sel.slice(1) : [sel];
         var a0 = [];
         var call = false;
         for (var i = 0; i < a.length; i++) {
-            var x = mn(obj, a[i], id, num);
+            var x = mn(obj, a[i], id, num, tot);
             if (x[0]) call = true;
             for (var j = 0; j < x[1].length; j++) a0.push(x[1][j]);
         }
         if (a0.length && typeof obj === 'object') {
             if (a0.length >= 1) a0.unshift(",");
             if (isArray(obj)) {
-                for (var i = 0; i < obj.length; i++) forEach(a0, obj[i], fun, undefined, i);
+                for (var i = 0; i < obj.length; i++) forEach(a0, obj[i], fun, undefined, i, obj.length);
             } else {
+                // it's a shame to do this for :last-child and other
+                // properties which count from the end when we don't
+                // even know if they're present.  Also, the stream
+                // parser is going to be pissed.
+                var l = 0;
+                for (var k in obj) if (obj.hasOwnProperty(k)) l++;
                 var i = 0;
-                for (var k in obj) if (obj.hasOwnProperty(k)) forEach(a0, obj[k], fun, k, i++);
+                for (var k in obj) if (obj.hasOwnProperty(k)) forEach(a0, obj[k], fun, k, i++, l);
             }
         }
         if (call && fun) fun(obj);
