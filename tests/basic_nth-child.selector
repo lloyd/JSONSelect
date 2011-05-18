@@ -1,1 +1,1 @@
-string:nth-child(1)
+string:nth-child(odd)

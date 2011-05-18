@@ -1,4 +1,3 @@
-alltests.txt
 basic_first-child.output
 basic_first-child.selector
 basic_grouping.output
@@ -14,6 +13,8 @@ basic_id_with_type.selector
 basic.json
 basic_last-child.output
 basic_last-child.selector
+basic_nth-child-2.output
+basic_nth-child-2.selector
 basic_nth-child.output
 basic_nth-child.selector
 basic_nth-last-child.output
@@ -28,4 +29,3 @@ basic_type.output
 basic_type.selector
 basic_universal.output
 basic_universal.selector
-basic.xml

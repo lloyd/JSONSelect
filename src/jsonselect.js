@@ -13,6 +13,7 @@
     var _es = {
         "ijs": "invalid json string",
         "mpc": "multiple pseudo classes (:xxx) not allowed",
+        "mepf": "malformed expression in pseudo-function",
         "nmi": "multiple ids not allowed",
         "pcny": "psuedo class functions not yet supported",
         "se": "selector expected",
@@ -34,7 +35,8 @@
         str: 4, // string
     };
 
-    var pat = /^(?:([\r\n\t\ ]+)|([*#,>])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
+    var pat = /^(?:([\r\n\t\ ]+)|([*#,>])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
+    var exprPat = /^\s*\(\s*(?:([+-]?)([0-9]*)n\s*(?:([+-])\s*([0-9]))?|(odd|even)|([+-]?[0-9]+))\s*\)/;
     var lex = function (str, off) {
         if (!off) off = 0;
         var m = pat.exec(str.substr(off));
@@ -45,10 +47,11 @@
         else if (m[2]) a = [off, m[0]];
         else if (m[3]) a = [off, toks.typ, m[0]];
         else if (m[4]) a = [off, toks.psc, m[0]];
-        else if (m[5]) te("upc");
-        else if (m[6]) a = [off, toks.str, jsonParse(m[0])];
-        else if (m[7]) te("ujs");
-        else if (m[8]) a = [off, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
+        else if (m[5]) a = [off, toks.psf, m[0]];
+        else if (m[6]) te("upc");
+        else if (m[7]) a = [off, toks.str, jsonParse(m[0])];
+        else if (m[8]) te("ujs");
+        else if (m[9]) a = [off, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
         return a;
     };
 
@@ -102,10 +105,35 @@
                 if (s.id) te("nmi");
                 s.id = l[2];
             } else if (l[1] === toks.psc) {
-                if (s.pc) te("mpc");
-                s.pc = l[2];
+                if (s.pc || s.pf) te("mpc");
+                // collapse first-child and last-child into nth-child expressions
+                if (l[2] === ':first-child') {
+                    s.pf = ":nth-child";
+                    s.a = 0;
+                    s.b = 1;
+                } else if (l[2] === ':last-child') {
+                    s.pf = ":nth-last-child";
+                    s.a = 0;
+                    s.b = 1;
+                } else {
+                    s.pc = l[2];
+                }
             } else if (l[1] === toks.psf) {
-                te("pcny");
+                if (s.pc || s.pf ) te("mpc");
+                s.pf = l[2];
+                var m = exprPat.exec(str.substr(l[0]));
+                if (!m) te("mepf");
+                if (m[5]) {
+                    s.a = 2;
+                    s.b = (m[5] === 'odd') ? 1 : 0;
+                } else if (m[6]) {
+                    s.a = 0;
+                    s.b = parseInt(m[6], 10);
+                } else {
+                    s.a = parseInt((m[1] ? m[1] : "+") + (m[2] ? m[2] : "1"),10)
+                    s.b = m[3] ? parseInt(m[3] + m[4],10) : 0;
+                }
+                l[0] += m[0].length;
             } else {
                 break;
             }
@@ -137,9 +165,14 @@
         var m = true;
         if (cs.type) m = m && (cs.type === mytypeof(node));
         if (cs.id)   m = m && (cs.id === id);
-        if (m && cs.pc) {
-            if (cs.pc === ":first-child") m = (num === 0);
-            else if (cs.pc === ":last-child") m = (num === (tot - 1));
+        if (m && cs.pf) {
+            if (cs.pf === ":nth-last-child") num = tot - num;
+            else num++;
+            if (cs.a === 0) {
+                m = cs.b === num;
+            } else {
+                m = (!((num - cs.b) % cs.a) && ((num*cs.a + cs.b) >= 0));
+            }
         }
 
         // should we repeat this selector for descendants?

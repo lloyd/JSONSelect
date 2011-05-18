@@ -23,7 +23,7 @@ $ JSONSelect._parse("#foo");
 $ JSONSelect._parse('#" foo "');
 [{id: " foo "}]
 $ JSONSelect._parse("string#foo:last-child");
-[{id: "foo", pc: ":last-child", type: "string"}]
+[{a: 0, b: 1, id: "foo", pf: ":nth-last-child", type: "string"}]
 $ JSONSelect._parse("string#foo#bar");
 Error: multiple ids not allowed
 $ JSONSelect._parse("string#foo:first-child#bar");
@@ -63,6 +63,32 @@ $ JSONSelect._parse("string > #foo number#bar, object, string, #\"baz bing\", :r
   [{id: "baz bing"}],
   [{pc: ":root"}]
 ]
+</pre>
+</div>
+
+<div class="test">
+Expressions
+<pre class="doctest">
+$ JSONSelect._parse(":nth-child(1)");
+[{a: 0, b: 1, pf: ":nth-child"}]
+$ JSONSelect._parse(":nth-child(2n+1)");
+[{a: 2, b: 1, pf: ":nth-child"}]
+$ JSONSelect._parse(":nth-child ( 2n + 1 )");
+[{a: 2, b: 1, pf: ":nth-child"}]
+$ JSONSelect._parse(":nth-child(odd)");
+[{a: 2, b: 1, pf: ":nth-child"}]
+$ JSONSelect._parse(":nth-child(even)");
+[{a: 2, b: 0, pf: ":nth-child"}]
+$ JSONSelect._parse(":nth-child(-n+6)");
+[{a: -1, b: 6, pf: ":nth-child"}]
+$ JSONSelect._parse(":nth-child(2n)");
+[{a: 2, b: 0, pf: ":nth-child"}]
+$ JSONSelect._parse(":nth-last-child(-3n - 3)");
+[{a: -3, b: -3, pf: ":nth-last-child"}]
+$ JSONSelect._parse(":first-child");
+[{a: 0, b: 1, pf: ":nth-child"}]
+$ JSONSelect._parse(":last-child");
+[{a: 0, b: 1, pf: ":nth-last-child"}]
 </pre>
 </div>
 

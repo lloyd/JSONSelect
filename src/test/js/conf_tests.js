@@ -13,7 +13,6 @@ $(document).ready(function() {
                 try {
                     a.text("");
                     JSONSelect.forEach(s.text(), obj, function(m) {
-                        console.log(m);
                         a.text($.trim(a.text() + "\n" + JSON.stringify(m, null, "    ")));
                     });
                 } catch(e) {
