@@ -1,0 +1,104 @@
+body {
+    background: #191919;
+    color: #a1a1a1;
+    font-family: 'Droid Sans', arial, serif;
+    font-size: 14px;
+}
+
+#header {
+    position: fixed;
+    background: #191919;
+    opacity: .7;
+    color: #ccc;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    margin: 0px;
+    padding: 4px 10px 4px 10px;
+}
+
+#main {
+    margin-top: 100px;
+}
+
+#header b {
+    font-weight: bold;
+    color: #fff;
+}
+
+a {
+    color: #999;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #fff;
+}
+
+#header .title {
+    font-size: 400%;
+}
+
+#header .subtitle {
+    font-size: 150%;
+    margin-left: 1em;
+    font-style: italic;
+}
+
+#header .nav {
+    float: right;
+    margin-right: 100px;
+}
+
+div.content {
+    max-width: 850px;
+    min-width: 675px;
+    margin: auto;
+}
+
+#splash {
+    max-width: 700px;
+}
+
+#splash .sample {
+    width: 250px;
+    float: right;
+    background-color: #333;
+    padding: .5em 1em .5em 1em;
+    margin-left: 1em;
+    margin-top: 5em;
+    border: 3px solid #444;
+    border-radius: 1em;
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    font-size: 90%;
+}
+
+#splash .sample tt {
+    font-size: 110%;
+    font-weight: bold;
+    padding: 0 .5em 0 .5em;
+}
+
+#splash .sample pre {
+    border-top: 1px dashed #aaa;
+    padding-top: 1em;
+}
+
+#splash .pitch {
+    padding-top: 2em;
+    font-size: 170%;
+}
+
+#splash .sample .selected {
+    opacity: .7;
+    padding: .6em;
+    margin-left: -.6em;
+    background-color: #fff475;
+    color: #000;
+    border: 2px solid white;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+
+}
