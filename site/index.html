@@ -14,32 +14,91 @@
       </div>
     </div>
     <div id="main">
-      <div id="splash" class="content">
-        <div class="sample">
-          <tt>#drinkPreference&nbsp;:first-child</tt>
+      <div style="display: none" id="splash" class="content">
+        <div class="sample json">
+          <tt>".author .drinkPref&nbsp;:first-child"</tt>
           <pre>{
-  "name": {
-    "first": "Lloyd",
-    "last": "Hilaiel",
-    "(cc)": "<a href="http://creativecommons.org/licenses/by-sa/3.0/us/">BY-SA</a>"
+  "author": {
+    "name": {
+      "first": "Lloyd",
+      "last": "Hilaiel"
+    },
+    "drinkPref": [
+      <span class="selected">"whiskey"</span>,
+      "beer",
+      "wine"
+    ],
   },
-  "drinkPreference": [
-    <span class="selected">"whiskey"</span>,
-    "beer",
-    "wine"
-  ]
+  "thing": "JSONSelect site",
+  "license": "<a href="http://creativecommons.org/licenses/by-sa/3.0/us/">(cc) BY-SA</a>"
 }</pre></div>
         <div class="pitch">
         <p>JSONSelect is a selector language for JSON.</p>
         <p>It <i>feels like</i> CSS.</p>
         <p>It's easy to learn.</p>
-        <p>And you should <a href="#">give it a try</a>.
+        <p>You should <a href="#">give it a try</a>.
         </div>
       </div>
-      <div id="splash" class="content">
+      <div id="tryit" class="content">
+        <div class="current"> Current Selector: <input type="text"></input><span class="results"></span></div>
+        <pre class="doc json">
+{
+    "name": {
+        "first": "Lloyd",
+        "last": "Hilaiel"
+    },
+    "favoriteColor": "yellow",
+    "languagesSpoken": [
+        {
+            "language": "Bulgarian",
+            "level": "advanced"
+        },
+        {
+            "language": "English",
+            "level": "native"
+        },
+        {
+            "language": "Spanish",
+            "level": "beginner"
+        }
+    ],
+    "seatingPreference": [
+        "window",
+        "aisle"
+    ],
+    "drinkPreference": [
+        "beer",
+        "whiskey",
+        "wine"
+    ],
+    "weight": 172
+}
+        </pre>
+        <div class="selectors">
+          <div class="title"> Choose A Selector... </div>
+          <div class="selector">#languagesSpoken #language</div>
+          <div class="selector">#drinkPreference :first-child</div>
+          <div class="selector">string:first-child</div>
+          <div class="selector">#name > #first, #name > #last</div>
+          <div class="selector">#language</div>
+          <div class="selector">#"weight"</div>
+          <div class="selector">#favoriteColor</div>
+          <div class="selector">string#favoriteColor</div>
+          <div class="selector">string:last-child</div>
+          <div class="selector">string:nth-child(-n+2)</div>
+          <div class="selector">string:nth-child(odd)</div>
+          <div class="selector">string:nth-last-child(1)</div>
+          <div class="selector">:root</div>
+          <div class="selector">number</div>
+          <div class="selector">object</div>
+          <div class="selector">string</div>
+        </div>
       </div>
     </div>
 
 <a href="https://github.com/lloyd/JSONSelect"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://d3nwyuy0nl342s.cloudfront.net/img/4c7dc970b89fd04b81c8e221ba88ff99a06c6b61/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub"></a>
   </body>
+  <script src="js/jquery-1.6.1.min.js"></script>
+  <script src="js/jsonselect.js"></script>
+  <script src="js/demo.js"></script>
 </html>
