@@ -20,14 +20,12 @@ $(document).ready(function() {
         } else if (location.hash.substr(0,5) === "#docs") {
             function showIt() {
                 var where = window.location.hash.substr(6);
-                console.log("scrollIt: " + where);
                 if (!where) {
-                    $("#docs").fadeIn(400);
+                    $("#doc").fadeIn(400);
                 } else {
-                    $("#docs").show();
+                    $("#doc").show();
                     var dst = $("a[name='" + where + "']");
                     if (dst.length) {
-                        console.log("want scrolltop: ", dst.offset().top - 100);
                         $('html, body').animate({scrollTop:dst.offset().top - 100}, 500);
                     }
                 }
@@ -36,8 +34,8 @@ $(document).ready(function() {
             if (!docsLoaded) {
                 $.get("JSONSelect.md").success(function(data) {
                     var converter = new Showdown.converter();
-                    $("#docs").html(converter.makeHtml(data));
-                    $("#docs a").each(function() {
+                    $("#doc").html(converter.makeHtml(data));
+                    $("#doc a").each(function() {
                         var n = $(this).attr('href');
                         if (typeof n === 'string' && n.substr(0,1) === '#') {
                             $(this).attr('href', "#docs/" + n.substr(1));
@@ -46,7 +44,7 @@ $(document).ready(function() {
                     docsLoaded = true;
                     showIt();
                 }).error(function() {
-                    $("#docs").text("Darnit, error fetching docs...").fadeIn(400);
+                    $("#doc").text("Darnit, error fetching docs...").fadeIn(400);
                 });
             } else {
                 showIt();
