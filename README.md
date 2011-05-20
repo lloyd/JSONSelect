@@ -1,6 +1,8 @@
+JSONSelect is *EXPERIMENTAL*, *ALPHA*, etc.
+
 JSONSelect defines a selector language similar to CSS intended for
 JSON documents.  For an introduction to the project see
-[jsonselect.org](http://jsonselect.org) or the [documentation](JSONSelect.md).
+[jsonselect.org](http://jsonselect.org) or the [documentation](blob/master/JSONSelect.md).
 
 ## Project Overview
 
@@ -20,8 +22,7 @@ but haughtily ignore wierd shit.
 
 This repository is the home to many things related to JSONSelect:
 
-  * [Documentation](JSONSelect.md) which describes the language
-  * The [jsonselect.org](jsonselect.org) [site source](site/)
-  * A [reference implementation](src/jsonselect.js) in JavaScript
-  * [Conformance tests](tests/) to help JSONSelect implementors along.
-
+  * [Documentation](blob/master/JSONSelect.md) which describes the language
+  * The [jsonselect.org](http://jsonselect.org) [site source](site/)
+  * A [reference implementation](blob/master/src/jsonselect.js) in JavaScript
+  * [Conformance tests](blob/master/tests/) to help JSONSelect implementors along.
