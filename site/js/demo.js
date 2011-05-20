@@ -15,10 +15,7 @@ $(document).ready(function() {
             found = found.replace(/[-[\]{}()*+?.,\\^$|#]/g, "\\$&").replace(/\s+/gm, "\\s*");
             var re = new RegExp(found, "m");
             var m = re.exec(html);
-            if (!m) {
-                console.log("ERROR, can't match: " + found);
-                continue;
-            }
+            if (!m) continue;
             wrk.push({ off: m.index, typ: "s" });
             wrk.push({ off: m[0].length+m.index, typ: "e" });
         }
