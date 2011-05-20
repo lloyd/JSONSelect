@@ -14,7 +14,7 @@ CSS for JSON objects.  A couple key goals of the project's include:
   * **efficient** - As many constructs of the language as possible will be able to evaluate against a document in a context free manner.  This means it will be possible to build efficient stream filtering.
 
 JSONSelect should make common operations easy, complex operations possible,
-and haughtily turn its cheek to wierd edge cases.
+but haughtily ignore wierd shit.
 
 ## What's Here
 
