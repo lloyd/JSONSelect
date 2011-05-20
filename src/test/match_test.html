@@ -36,7 +36,7 @@ $ JSONSelect.match("number", [ "a", 1, true, null, false, "b", 3.1415, "c" ] );
 <div class="test">
 IDs
 <pre class="doctest">
-$ JSONSelect.match("#foo", {foo: "aMatch", bar: [ { foo: "anotherMatch" } ] });
+$ JSONSelect.match(".foo", {foo: "aMatch", bar: [ { foo: "anotherMatch" } ] });
 ["aMatch", "anotherMatch"]
 </pre>
 </div>
@@ -44,13 +44,13 @@ $ JSONSelect.match("#foo", {foo: "aMatch", bar: [ { foo: "anotherMatch" } ] });
 <div class="test">
 Descendants
 <pre class="doctest">
-$ JSONSelect.match("#foo #bar", {foo: { baz: 1, bar: 2 }, bar: 3});
+$ JSONSelect.match(".foo .bar", {foo: { baz: 1, bar: 2 }, bar: 3});
 [2]
-$ JSONSelect.match("#foo > #bar", {foo: { baz: 1, bar: 2 }, bar: 3});
+$ JSONSelect.match(".foo > .bar", {foo: { baz: 1, bar: 2 }, bar: 3});
 [2]
-$ JSONSelect.match("#foo > #bar", {foo: { baz: { bar: 4 }, bar: 2 }, bar: 3});
+$ JSONSelect.match(".foo > .bar", {foo: { baz: { bar: 4 }, bar: 2 }, bar: 3});
 [2]
-$ JSONSelect.match("#foo #bar", {foo: { baz: { bar: 4 }, bar: 2 }, bar: 3});
+$ JSONSelect.match(".foo .bar", {foo: { baz: { bar: 4 }, bar: 2 }, bar: 3});
 [4, 2]
 </pre>
 </div>

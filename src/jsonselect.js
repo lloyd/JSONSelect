@@ -17,7 +17,7 @@
         "nmi": "multiple ids not allowed",
         "pcny": "psuedo class functions not yet supported",
         "se": "selector expected",
-        "sra": "string required after '#'",
+        "sra": "string required after '.'",
         "uc": "unrecognized char",
         "ujs": "unclosed json string",
         "upc": "unrecognized psuedo class"
@@ -35,7 +35,7 @@
         str: 4, // string
     };
 
-    var pat = /^(?:([\r\n\t\ ]+)|([*#,>])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
+    var pat = /^(?:([\r\n\t\ ]+)|([*.,>])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
     var exprPat = /^\s*\(\s*(?:([+-]?)([0-9]*)n\s*(?:([+-])\s*([0-9]))?|(odd|even)|([+-]?[0-9]+))\s*\)/;
     var lex = function (str, off) {
         if (!off) off = 0;
@@ -99,7 +99,7 @@
         while (true) {
             if (l === undefined) {
                 break;
-            } else if (l[1] === '#') {
+            } else if (l[1] === '.') {
                 l = lex(str, (off = l[0]));
                 if (!l || l[1] !== toks.str) te("sra");
                 if (s.id) te("nmi");

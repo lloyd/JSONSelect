@@ -18,23 +18,23 @@
 <div class="test">
 Selectors
 <pre class="doctest">
-$ JSONSelect._parse("#foo");
+$ JSONSelect._parse(".foo");
 [{id: "foo"}]
-$ JSONSelect._parse('#" foo "');
+$ JSONSelect._parse('." foo "');
 [{id: " foo "}]
-$ JSONSelect._parse("string#foo:last-child");
+$ JSONSelect._parse("string.foo:last-child");
 [{a: 0, b: 1, id: "foo", pf: ":nth-last-child", type: "string"}]
-$ JSONSelect._parse("string#foo#bar");
+$ JSONSelect._parse("string.foo.bar");
 Error: multiple ids not allowed
-$ JSONSelect._parse("string#foo:first-child#bar");
+$ JSONSelect._parse("string.foo:first-child.bar");
 Error: multiple ids not allowed
-$ JSONSelect._parse("string:last-child#foo:first-child#bar");
+$ JSONSelect._parse("string:last-child.foo:first-child.bar");
 Error: multiple pseudo classes (:xxx) not allowed
-$ JSONSelect._parse("string#");
-Error: string required after '#'
+$ JSONSelect._parse("string.");
+Error: string required after '.'
 $ JSONSelect._parse("string:bogus");
 Error: unrecognized psuedo class
-$ JSONSelect._parse("string#xxx\\@yyy");
+$ JSONSelect._parse("string.xxx\\@yyy");
 [{id: "xxx@yyy", type: "string"}]
 $ JSONSelect._parse(" ");
 Error: selector expected
@@ -46,15 +46,15 @@ Error: selector expected
 <div class="test">
 Combinators
 <pre class="doctest">
-$ JSONSelect._parse("#foo #bar");
+$ JSONSelect._parse(".foo .bar");
 [{id: "foo"}, {id: "bar"}]
-$ JSONSelect._parse("string#foo , number#foo");
+$ JSONSelect._parse("string.foo , number.foo");
 [",", [{id: "foo", type: "string"}], [{id: "foo", type: "number"}]]
-$ JSONSelect._parse("string > #foo number#bar");
+$ JSONSelect._parse("string > .foo number.bar");
 [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}]
-$ JSONSelect._parse("string > #foo number#bar, object");
+$ JSONSelect._parse("string > .foo number.bar, object");
 [",", [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}], [{type: "object"}]]
-$ JSONSelect._parse("string > #foo number#bar, object, string, #\"baz bing\", :root");
+$ JSONSelect._parse("string > .foo number.bar, object, string, .\"baz bing\", :root");
 [
   ",",
   [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}],

@@ -6,13 +6,16 @@ $(document).ready(function() {
         if (location.hash === "#tryit") {
             $("#tryit input").val("").keyup();
             $("#tryit").fadeIn(400, function() {
-                $("#tryit input").val("#drinkPreference :first-child").keyup();
+                $("#tryit input").val(".languagesSpoken .language").keyup();
             });
+        } else if (location.hash === "#cred") {
+            $("#main > .content").hide();
+            $("#cred").fadeIn(400);
         } else {
             $("#splash").fadeIn(400);
         }
     });
 
     // Trigger the event (useful on page load).
-    $(window).hashchange();    
+    $(window).hashchange();
 });

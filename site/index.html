@@ -9,7 +9,7 @@
     <div id="header">
       <div class="content">
         <div class="title">json<b>:</b>select<b>()</b></div>
-        <div class="nav"> <a href="#overview">Overview</a> | <a href="#tryit">Try It!</a> | <a href="#docs">Docs</a> | <a href="https://github.com/lloyd/JSONSelect">Code</a> | <a href="mailto:jsonselect@librelist.com">Contact</a> </div>
+        <div class="nav"> <a href="#overview">Overview</a> | <a href="#tryit">Try It!</a> | <a href="#docs">Docs</a> | <a href="https://github.com/lloyd/JSONSelect">Code</a> | <a href="mailto:jsonselect@librelist.com">Contact</a> | <a href="#cred">Credit</a> </div>
         <div class="subtitle">CSS-like selectors for JSON.</div>
       </div>
     </div>
@@ -33,10 +33,10 @@
   "license": "<a href="http://creativecommons.org/licenses/by-sa/3.0/us/">(cc) BY-SA</a>"
 }</pre></div>
         <div class="pitch">
-        <p>JSONSelect is a selector language for JSON.</p>
+        <p>JSONSelect is an <i>experimental</i> selector language for JSON.</p>
+        <p>It makes it easy to access data  in complex JSON documents.</p>
         <p>It <i>feels like</i> CSS.</p>
-        <p>It's easy to learn.</p>
-        <p>You should <a href="#">give it a try</a>.
+        <p>Why not <a href="#tryit">give it a try</a>?
         </div>
       </div>
       <div id="tryit" style="display: none" class="content">
@@ -67,8 +67,8 @@
         "aisle"
     ],
     "drinkPreference": [
-        "beer",
         "whiskey",
+        "beer",
         "wine"
     ],
     "weight": 172
@@ -76,14 +76,15 @@
         </pre>
         <div class="selectors">
           <div class="title"> Choose A Selector... </div>
-          <div class="selector">#languagesSpoken #language</div>
-          <div class="selector">#drinkPreference :first-child</div>
+          <div class="selector">.languagesSpoken .language</div>
+          <div class="selector">.drinkPreference :first-child</div>
+          <div class="selector">.name > *</div>
+          <div class="selector">.seatingPreference :nth-child(1)</div>
           <div class="selector">string:first-child</div>
-          <div class="selector">#name > #first, #name > #last</div>
-          <div class="selector">#language</div>
-          <div class="selector">#"weight"</div>
-          <div class="selector">#favoriteColor</div>
-          <div class="selector">string#favoriteColor</div>
+          <div class="selector">."weight"</div>
+          <div class="selector">.language</div>
+          <div class="selector">.favoriteColor</div>
+          <div class="selector">string.favoriteColor</div>
           <div class="selector">string:last-child</div>
           <div class="selector">string:nth-child(-n+2)</div>
           <div class="selector">string:nth-child(odd)</div>
@@ -93,6 +94,18 @@
           <div class="selector">object</div>
           <div class="selector">string</div>
         </div>
+      </div>
+      <div style="display: none" id="cred" class="content">
+        <p>JSONSelect is dedicated to sad code everywhere that looks like this:</p>
+        <pre class="json">if (foo && foo.bar && foo.bar.baz && foo.bar.baz.length > 2)
+    return foo.bar.baz[2];
+return undefined;</pre>
+        <p>It was created by <a href="http://trickyco.de/">Lloyd Hilaiel</a>.</p>
+        <p><a href="http://blog.mozilla.com/dherman/">Dave Herman</a> provided the name, and lots of encouragement.</p>
+        <p><a href="http://open-mike.org/">Mike Hanson</a> gave deep feedback and ideas.</p>
+        <p><a href="http://ejohn.org/">John Resig</a> unwittingly contributed his <a href="http://ejohn.org/blog/selectors-that-people-actually-use/">design thoughts</a>.</p>
+        <p><a href="http://json.org/">JSON</a> and <a href="http://www.w3.org/TR/css3-selectors/">CSS3 Selectors</a> are the prerequisites to JSONSelect's existence, so thanks to you guys too.</p>
+        <p></p>
       </div>
     </div>
 

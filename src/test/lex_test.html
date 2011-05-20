@@ -24,8 +24,8 @@ $ JSONSelect._lex("*");
 [1, "*"]
 $ JSONSelect._lex(",");
 [1, ","]
-$ JSONSelect._lex("#");
-[1, "#"]
+$ JSONSelect._lex(".");
+[1, "."]
 </pre>
 </div>
 
@@ -99,7 +99,7 @@ Error: invalid json string
 </div>
 
 <div class="test">
-identifiers (like after '#')
+identifiers (like after '.')
 <pre class="doctest">
 $ JSONSelect._lex("foo");
 [3, 4, "foo"]
