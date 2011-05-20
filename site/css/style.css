@@ -77,6 +77,10 @@ div.content {
     font-size: 90%;
 }
 
+#docs {
+    margin-top: 140px;
+}
+
 #splash .sample tt {
     font-size: 90%;
     padding: 0 .2em 0 .2em;
@@ -172,4 +176,3 @@ pre.doc {
     padding-top: 2em;
 }
 
-#cred > pre {

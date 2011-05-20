@@ -1,9 +1,12 @@
 $(document).ready(function() {
-    // Bind the event.
-    $(window).hashchange(function(){
-        // Alerts every time the hash changes!
-        $("#main > .content").hide();
+    var docsLoaded = false;
+
+    $(window).hashchange(function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
         if (location.hash === "#tryit") {
+            $("#main > .content").hide();
             $("#tryit input").val("").keyup();
             $("#tryit").fadeIn(400, function() {
                 $("#tryit input").val(".languagesSpoken .language").keyup();
@@ -11,11 +14,50 @@ $(document).ready(function() {
         } else if (location.hash === "#cred") {
             $("#main > .content").hide();
             $("#cred").fadeIn(400);
-        } else {
+        } else if (location.hash === '#overview' || location.hash === '') {
+            $("#main > .content").hide();
             $("#splash").fadeIn(400);
+        } else if (location.hash.substr(0,5) === "#docs") {
+            function showIt() {
+                var where = window.location.hash.substr(6);
+                console.log("scrollIt: " + where);
+                if (!where) {
+                    $("#docs").fadeIn(400);
+                } else {
+                    $("#docs").show();
+                    var dst = $("a[name='" + where + "']");
+                    if (dst.length) {
+                        console.log("want scrolltop: ", dst.offset().top - 100);
+                        $('html, body').animate({scrollTop:dst.offset().top - 100}, 500);
+                    }
+                }
+            }
+            $("#main > .content").hide();
+            if (!docsLoaded) {
+                $.get("JSONSelect.md").success(function(data) {
+                    var converter = new Showdown.converter();
+                    $("#docs").html(converter.makeHtml(data));
+                    $("#docs a").each(function() {
+                        var n = $(this).attr('href');
+                        if (typeof n === 'string' && n.substr(0,1) === '#') {
+                            $(this).attr('href', "#docs/" + n.substr(1));
+                        }
+                    });
+                    docsLoaded = true;
+                    showIt();
+                }).error(function() {
+                    $("#docs").text("Darnit, error fetching docs...").fadeIn(400);
+                });
+            } else {
+                showIt();
+            }
+        } else {
         }
+        return false;
     });
 
     // Trigger the event (useful on page load).
+    if (window.location.hash === "")
+        window.location.hash = "#overview";
     $(window).hashchange();
 });

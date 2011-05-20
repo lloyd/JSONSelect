@@ -1,9 +1,20 @@
-# JSONSelect 1
+**WARNING**: This document is a work in progress, just like JSONSelect itself.
+View or contribute to the latest version [on github](http://github.com/lloyd/JSONSelect/blob/master/JSONSelect.md)
 
-## Features
+# JSONSelect
 
-JSONSelect level 1 includes the following constructs, mostly from CSS3
-but with some differences.
+  1. [introduction](#introduction)
+  1. [language overview](#overview)
+  1. [grouping](#grouping)
+  1. [selectors](#selectors)
+  1. [pseudo classes](#pseudo)
+  1. [combinators](#combinators)
+  1. [planned additions](#additions)
+  1. [grammar](#grammar)
+
+## Introduction<a name="introduction"></a>
+
+## Language Overview<a name="overview"></a>
 
   * `string` -- type selectors
   * `*` -- the universal type selector
@@ -23,8 +34,27 @@ but with some differences.
   * `object string` -- a descendant combinator
   * `#bar > string` -- a child combinator
 
+## Grouping<a name="grouping"></a>
 
-## A Semi-Formal Grammar
+## Selectors<a name="selectors"></a>
+
+## Psuedo Classes<a name="pseudo"></a>
+
+## Combinators<a name="combinators"></a>
+
+## Planned Additions<a name="additions"></a>
+
+  * `boolean#enabled ~ #email` -- a general sibling operator,
+    *without the ordering requirement*
+  * `:not()`
+  * `:has()`
+  * `[=value]` a node with a value of exactly `value`
+  * `[^=value]` a node whose value starts with `value`
+  * `[$=value]` a node whose value ends with `value`
+  * `[*=value]` a node whose value contains the substring `value`
+
+
+## Grammar<a name="grammar"></a>
 
 (Adapted from [CSS3](http://www.w3.org/TR/css3-selectors/#descendant-combinators) and
  [json.org](http://json.org/))
