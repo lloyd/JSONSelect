@@ -18,8 +18,8 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
 
   * `string` -- type selectors
   * `*` -- the universal type selector
-  * `.foo` -- ID selectors, which match against object keys
-  * `."a string"` -- ID selectors with JSON-string quoted ids
+  * `.foo` -- Class selectors, which match against object keys
+  * `."a string"` -- Class selectors, but quoted as JSON-strings
   * Several structural psuedo-classes:
     * `:root` - the root psuedo class
     * `:nth-child()` - the nth-child class that matches object
