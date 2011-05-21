@@ -15,12 +15,11 @@
         "mpc": "multiple pseudo classes (:xxx) not allowed",
         "mepf": "malformed expression in pseudo-function",
         "nmi": "multiple ids not allowed",
-        "pcny": "psuedo class functions not yet supported",
         "se": "selector expected",
         "sra": "string required after '.'",
         "uc": "unrecognized char",
         "ujs": "unclosed json string",
-        "upc": "unrecognized psuedo class"
+        "upc": "unrecognized pseudo class"
     };
     /** <<<--- **/
     // throw a full or abbreviated error message depending on the existence of the
