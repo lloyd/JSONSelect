@@ -235,4 +235,4 @@
         forEach: function(sel, obj, fun) { return compile(sel).forEach(obj, fun) },
         compile: compile
     };
-})((typeof exports === "undefined") ? window : exports);
+})(typeof exports === "undefined" ? window : exports);
