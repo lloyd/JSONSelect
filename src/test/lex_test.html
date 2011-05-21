@@ -18,8 +18,8 @@
 <div class="test">
 Simple tokens
 <pre class="doctest">
-$ JSONSelect._lex(">");
-[1, ">"]
+$ JSONSelect._lex("&gt;");
+[1, "&gt;"]
 $ JSONSelect._lex("*");
 [1, "*"]
 $ JSONSelect._lex(",");
@@ -32,8 +32,8 @@ $ JSONSelect._lex(".");
 <div class="test">
 Offsets
 <pre class="doctest">
-$ JSONSelect._lex("foobar>",6);
-[7, ">"]
+$ JSONSelect._lex("foobar&gt;",6);
+[7, "&gt;"]
 </pre>
 </div>
 

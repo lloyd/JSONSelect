@@ -9,7 +9,7 @@ the terms of the MIT License.
 */
 
 
-function doctest(verbosity/*default=0*/, elements/*optional*/,
+var doctest = window.doctest = function doctest(verbosity/*default=0*/, elements/*optional*/,
                  outputId/*optional*/) {
   var output = document.getElementById(outputId || 'doctestOutput');
   var reporter = new doctest.Reporter(output, verbosity || 0);

@@ -46,9 +46,9 @@ Descendants
 <pre class="doctest">
 $ JSONSelect.match(".foo .bar", {foo: { baz: 1, bar: 2 }, bar: 3});
 [2]
-$ JSONSelect.match(".foo > .bar", {foo: { baz: 1, bar: 2 }, bar: 3});
+$ JSONSelect.match(".foo &gt; .bar", {foo: { baz: 1, bar: 2 }, bar: 3});
 [2]
-$ JSONSelect.match(".foo > .bar", {foo: { baz: { bar: 4 }, bar: 2 }, bar: 3});
+$ JSONSelect.match(".foo &gt; .bar", {foo: { baz: { bar: 4 }, bar: 2 }, bar: 3});
 [2]
 $ JSONSelect.match(".foo .bar", {foo: { baz: { bar: 4 }, bar: 2 }, bar: 3});
 [4, 2]
