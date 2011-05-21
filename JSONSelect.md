@@ -18,8 +18,8 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
 
   * `string` -- type selectors
   * `*` -- the universal type selector
-  * `#foo` -- ID selectors, which match against object keys
-  * `#"a string"` -- ID selectors with JSON-string quoted ids
+  * `.foo` -- ID selectors, which match against object keys
+  * `."a string"` -- ID selectors with JSON-string quoted ids
   * Several structural psuedo-classes:
     * `:root` - the root psuedo class
     * `:nth-child()` - the nth-child class that matches object
@@ -32,7 +32,7 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
       without children
   * `string, number` -- a grouping operator
   * `object string` -- a descendant combinator
-  * `#bar > string` -- a child combinator
+  * `.bar > string` -- a child combinator
 
 ## Grouping<a name="grouping"></a>
 
@@ -44,7 +44,7 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
 
 ## Planned Additions<a name="additions"></a>
 
-  * `boolean#enabled ~ #email` -- a general sibling operator,
+  * `boolean.enabled ~ .email` -- a general sibling operator,
     *without the ordering requirement*
   * `:not()`
   * `:has()`
@@ -87,8 +87,8 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
       ;
 
     hash
-      : `#` name
-      | `#` json_string
+      : `.` name
+      | `.` json_string
       ;
     
     pseudo
