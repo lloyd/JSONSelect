@@ -33,7 +33,7 @@ Error: multiple pseudo classes (:xxx) not allowed
 $ JSONSelect._parse("string.");
 Error: string required after '.'
 $ JSONSelect._parse("string:bogus");
-Error: unrecognized psuedo class
+Error: unrecognized pseudo class
 $ JSONSelect._parse("string.xxx\\@yyy");
 [{id: "xxx@yyy", type: "string"}]
 $ JSONSelect._parse(" ");

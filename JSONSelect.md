@@ -20,15 +20,15 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
   * `*` -- the universal type selector
   * `.foo` -- Class selectors, which match against object keys
   * `."a string"` -- Class selectors, but quoted as JSON-strings
-  * Several structural psuedo-classes:
-    * `:root` - the root psuedo class
+  * Several structural pseudo-classes:
+    * `:root` - the root pseudo class
     * `:nth-child()` - the nth-child class that matches object
       values and array elements
     * `:nth-last-child()` - the inverse of `:nth-child()`
     * `:first-child` - the first child of an array or object
     * `:last-child` - the last child of an array or object
     * `:only-child` - the only child of an array or object
-    * `:empty` - the empty psuedo class matching arrays or objects
+    * `:empty` - the empty pseudo class matching arrays or objects
       without children
   * `string, number` -- a grouping operator
   * `object string` -- a descendant combinator
@@ -38,7 +38,7 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
 
 ## Selectors<a name="selectors"></a>
 
-## Psuedo Classes<a name="pseudo"></a>
+## Pseudo Classes<a name="pseudo"></a>
 
 ## Combinators<a name="combinators"></a>
 
@@ -94,14 +94,14 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
     pseudo
       /* Note that pseudo-elements are restricted to one per selector and */
       /* occur only in the last simple_selector_sequence. */
-      : `:` psuedo_class_name
-      | `:` psuedo_function_name `(` expression `)`
+      : `:` pseudo_class_name
+      | `:` pseudo_function_name `(` expression `)`
       ;
 
-    psuedo_class_name
+    pseudo_class_name
       : `root` | `first-child` | `last-child` | `only-child`
     
-    psuedo_function_name
+    pseudo_function_name
       : `nth-child` | `nth-last-child`
 
     expression
