@@ -226,13 +226,9 @@
         };
     }
 
-    exports.JSONSelect = {
-        // expose private API for testing
-        _lex: lex,
-        _parse: parse,
-        // public API
-        match: function (sel, obj) { return compile(sel).match(obj) },
-        forEach: function(sel, obj, fun) { return compile(sel).forEach(obj, fun) },
-        compile: compile
-    };
-})(typeof exports === "undefined" ? window : exports);
+    exports._lex = lex;
+    exports._parse = parse;
+    exports.match = function (sel, obj) { return compile(sel).match(obj) };
+    exports.forEach = function(sel, obj, fun) { return compile(sel).forEach(obj, fun) };
+    exports.compile = compile;
+})(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
