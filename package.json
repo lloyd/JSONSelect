@@ -10,7 +10,7 @@
   },
   "main": "src/jsonselect",
   "engines": {
-    "node": "~v0.4.8-pre"
+    "node": ">=0.4.7"
   },
   "dependencies": {},
   "devDependencies": {}
