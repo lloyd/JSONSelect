@@ -13,5 +13,14 @@
     "node": ">=0.4.7"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "files": [
+    "src/jsonselect.js",
+    "src/test/run.js",
+    "tests",
+    "README.md",
+    "JSONSelect.md",
+    "package.json",
+    "LICENSE"
+  ]
 }
