@@ -50,14 +50,14 @@ $ JSONSelect._parse(".foo .bar");
 [{id: "foo"}, {id: "bar"}]
 $ JSONSelect._parse("string.foo , number.foo");
 [",", [{id: "foo", type: "string"}], [{id: "foo", type: "number"}]]
-$ JSONSelect._parse("string > .foo number.bar");
-[{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}]
-$ JSONSelect._parse("string > .foo number.bar, object");
-[",", [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}], [{type: "object"}]]
-$ JSONSelect._parse("string > .foo number.bar, object, string, .\"baz bing\", :root");
+$ JSONSelect._parse("string &gt; .foo number.bar");
+[{type: "string"}, "&gt;", {id: "foo"}, {id: "bar", type: "number"}]
+$ JSONSelect._parse("string &gt; .foo number.bar, object");
+[",", [{type: "string"}, "&gt;", {id: "foo"}, {id: "bar", type: "number"}], [{type: "object"}]]
+$ JSONSelect._parse("string &gt; .foo number.bar, object, string, .\"baz bing\", :root");
 [
   ",",
-  [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}],
+  [{type: "string"}, "&gt;", {id: "foo"}, {id: "bar", type: "number"}],
   [{type: "object"}],
   [{type: "string"}],
   [{id: "baz bing"}],
