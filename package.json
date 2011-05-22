@@ -17,6 +17,7 @@
   "files": [
     "src/jsonselect.js",
     "src/test/run.js",
+    "src/test/tests",
     "tests",
     "README.md",
     "JSONSelect.md",
