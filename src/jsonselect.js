@@ -2,9 +2,25 @@
 /*
  * This is the JSONSelect reference implementation, in javascript.
  */
-;(function(exports) {
-    var jp = (typeof JSON !== 'undefined' ? JSON.parse : eval);
-    function jsonParse(s) { try { return jp(s); } catch(e) { te("ijs"); }; }
+(function(exports) {
+
+    function jsonParse(str) { 
+      
+      try { 
+
+          if(JSON && JSON.parse){
+              return JSON.parse(str);
+          } 
+  
+          return (new Function("return " + str))();
+          
+      } catch(e) { 
+        te("ijs");
+      }
+    }
+
+    //var jp = (typeof JSON !== 'undefined' ? JSON.parse : eval);
+    //function jsonParse(s) { try { return jp(s); } catch(e) { te("ijs"); }; }
 
     // emitted error codes.  Strip this table for an, uh, "optimized build"
     var _es = {}; // overshadow any globals when the table is stripped
@@ -232,3 +248,5 @@
     exports.forEach = function(sel, obj, fun) { return compile(sel).forEach(obj, fun) };
     exports.compile = compile;
 })(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
+
+
