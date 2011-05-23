@@ -2,9 +2,8 @@
 /*
  * This is the JSONSelect reference implementation, in javascript.
  */
-(function() {
-    var w = window;
-    var jp = (w.JSON ? w.JSON.parse : w.eval);
+;(function(exports) {
+    var jp = (typeof JSON !== 'undefined' ? JSON.parse : eval);
     function jsonParse(s) { try { return jp(s); } catch(e) { te("ijs"); }; }
 
     // emitted error codes.  Strip this table for an, uh, "optimized build"
@@ -227,13 +226,9 @@
         };
     }
 
-    w.JSONSelect = {
-        // expose private API for testing
-        _lex: lex,
-        _parse: parse,
-        // public API
-        match: function (sel, obj) { return compile(sel).match(obj) },
-        forEach: function(sel, obj, fun) { return compile(sel).forEach(obj, fun) },
-        compile: compile
-    };
-})();
+    exports._lex = lex;
+    exports._parse = parse;
+    exports.match = function (sel, obj) { return compile(sel).match(obj) };
+    exports.forEach = function(sel, obj, fun) { return compile(sel).forEach(obj, fun) };
+    exports.compile = compile;
+})(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
