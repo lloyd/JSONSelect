@@ -1,7 +1,7 @@
 BUILD_DIR = build
 
 PREFIX = .
-SRC_DIR = ${PREFIX}/src
+SRC_DIR = ${PREFIX}
 DIST_DIR = ${PREFIX}/dist
 
 
