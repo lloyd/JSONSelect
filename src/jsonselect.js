@@ -6,14 +6,14 @@
 
     var // localize references
     toString = Object.prototype.toString;
-    
-    function jsonParse(str) { 
-      try { 
+
+    function jsonParse(str) {
+      try {
           if(JSON && JSON.parse){
               return JSON.parse(str);
-          } 
+          }
           return (new Function("return " + str))();
-      } catch(e) { 
+      } catch(e) {
         te("ijs");
       }
     }
@@ -30,12 +30,11 @@
         "ujs": "unclosed json string",
         "upc": "unrecognized pseudo class"
     };
-    /** <<<--- **/
-    // throw a full or abbreviated error message depending on the existence of the
-    // errorCodes table
-    var te = function(ec) { 
-        throw new Error(errorCodes[ec] ? errorCodes[ec] : "jsonselect error: "+ec);
-    };
+
+    // throw an error message
+    function te(ec) {
+        throw new Error(errorCodes[ec]);
+    }
 
     // THE LEXER
     var toks = {
@@ -68,9 +67,8 @@
     // THE PARSER
 
     var parse = function (str) {
-        var a = [], off = 0, 
-        am;
-        
+        var a = [], off = 0, am;
+
         while (true) {
             var s = parse_selector(str, off);
             a.push(s[1]);
@@ -183,13 +181,13 @@
             else num++;
             if (cs.a === 0) {
                 m = cs.b === num;
-            } else {                                                    
+            } else {
                 mod = ((num - cs.b) % cs.a);
 
                 m = (!mod && ((num*cs.a + cs.b) >= 0));
             }
         }
-        
+
         // should we repeat this selector for descendants?
         if (sel[0] !== ">" && sel[0].pc !== ":root") sels.push(sel);
 
@@ -205,8 +203,8 @@
     function forEach(sel, obj, fun, id, num, tot) {
         var a = (sel[0] === ",") ? sel.slice(1) : [sel],
         a0 = [],
-        call = false, 
-        i = 0, j = 0, l = 0, k, x; 
+        call = false,
+        i = 0, j = 0, l = 0, k, x;
         for (i = 0; i < a.length; i++) {
             x = mn(obj, a[i], id, num, tot);
             if (x[0]) {
@@ -250,8 +248,8 @@
 
     function match(sel, obj) {
         var a = [];
-        forEach(sel, obj, function(x) { 
-            a.push(x); 
+        forEach(sel, obj, function(x) {
+            a.push(x);
         });
         return a;
     }
@@ -262,7 +260,7 @@
             match: function(obj){
                 return match(this.sel, obj);
             },
-            forEach: function(obj, fun) { 
+            forEach: function(obj, fun) {
                 return forEach(this.sel, obj, fun);
             }
         };
@@ -270,11 +268,11 @@
 
     exports._lex = lex;
     exports._parse = parse;
-    exports.match = function (sel, obj) { 
+    exports.match = function (sel, obj) {
         return compile(sel).match(obj);
     };
-    exports.forEach = function(sel, obj, fun) { 
-        return compile(sel).forEach(obj, fun); 
+    exports.forEach = function(sel, obj, fun) {
+        return compile(sel).forEach(obj, fun);
     };
     exports.compile = compile;
 })(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
