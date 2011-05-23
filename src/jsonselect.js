@@ -4,6 +4,9 @@
  */
 (function(exports) {
 
+    var // localize references
+    toString = Object.prototype.toString;
+    
     function jsonParse(str) { 
       try { 
           if(JSON && JSON.parse){
@@ -158,7 +161,8 @@
     // THE EVALUATOR
 
     function isArray(o) {
-        return Object.prototype.toString.call(o) === '[object Array]';
+        return Array.isArray ? Array.isArray(o) : 
+          toString.call(o) === '[object Array]';
     }
 
     function mytypeof(o) {
