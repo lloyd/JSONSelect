@@ -75,7 +75,7 @@
             var s = parse_selector(str, off);
             a.push(s[1]);
             s = lex(str, off = s[0]);
-            if (s && s[1] === ' ') s = lex(str, off = s[0]);
+            if (s && s[1] === " ") s = lex(str, off = s[0]);
             if (!s) break;
             // now we've parsed a selector, and have something else...
             if (s[1] === ">") {
@@ -111,7 +111,7 @@
         while (true) {
             if (l === undefined) {
                 break;
-            } else if (l[1] === '.') {
+            } else if (l[1] === ".") {
                 l = lex(str, (off = l[0]));
                 if (!l || l[1] !== toks.str) te("sra");
                 if (s.id) te("nmi");
@@ -119,11 +119,11 @@
             } else if (l[1] === toks.psc) {
                 if (s.pc || s.pf) te("mpc");
                 // collapse first-child and last-child into nth-child expressions
-                if (l[2] === ':first-child') {
+                if (l[2] === ":first-child") {
                     s.pf = ":nth-child";
                     s.a = 0;
                     s.b = 1;
-                } else if (l[2] === ':last-child') {
+                } else if (l[2] === ":last-child") {
                     s.pf = ":nth-last-child";
                     s.a = 0;
                     s.b = 1;
@@ -137,7 +137,7 @@
                 if (!m) te("mepf");
                 if (m[5]) {
                     s.a = 2;
-                    s.b = (m[5] === 'odd') ? 1 : 0;
+                    s.b = (m[5] === "odd") ? 1 : 0;
                 } else if (m[6]) {
                     s.a = 0;
                     s.b = parseInt(m[6], 10);
@@ -162,19 +162,19 @@
 
     function isArray(o) {
         return Array.isArray ? Array.isArray(o) : 
-          toString.call(o) === '[object Array]';
+          toString.call(o) === "[object Array]";
     }
 
     function mytypeof(o) {
-        if (o === null) return 'null';
+        if (o === null) return "null";
         var to = typeof o;
-        if (to === 'object' && isArray(o)) to = 'array';
+        if (to === "object" && isArray(o)) to = "array";
         return to;
     }
 
     function mn(node, sel, id, num, tot) {
         var sels = [];
-        var cs = (sel[0] === '>') ? sel[1] : sel[0];
+        var cs = (sel[0] === ">") ? sel[1] : sel[0];
         var m = true, mod;
         if (cs.type) m = m && (cs.type === mytypeof(node));
         if (cs.id)   m = m && (cs.id === id);
@@ -191,11 +191,11 @@
         }
         
         // should we repeat this selector for descendants?
-        if (sel[0] !== '>' && sel[0].pc !== ":root") sels.push(sel);
+        if (sel[0] !== ">" && sel[0].pc !== ":root") sels.push(sel);
 
         if (m) {
             // is there a fragment that we should pass down?
-            if (sel[0] === '>') { if (sel.length > 2) { m = false; sels.push(sel.slice(2)); } }
+            if (sel[0] === ">") { if (sel.length > 2) { m = false; sels.push(sel.slice(2)); } }
             else if (sel.length > 1) { m = false; sels.push(sel.slice(1)); }
         }
 
@@ -203,7 +203,7 @@
     }
 
     function forEach(sel, obj, fun, id, num, tot) {
-        var a = (sel[0] === ',') ? sel.slice(1) : [sel],
+        var a = (sel[0] === ",") ? sel.slice(1) : [sel],
         a0 = [],
         call = false, 
         i = 0, j = 0, l = 0, k, x; 
@@ -216,7 +216,7 @@
                 a0.push(x[1][j]);
             }
         }
-        if (a0.length && typeof obj === 'object') {
+        if (a0.length && typeof obj === "object") {
             if (a0.length >= 1) {
                 a0.unshift(",");
             }
