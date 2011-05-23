@@ -56,6 +56,10 @@ div.content {
     margin: auto;
 }
 
+div#tryit {
+    min-width: 825px;
+}
+
 #splash {
     max-width: 700px;
 }
