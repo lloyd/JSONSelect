@@ -13,11 +13,11 @@ SRC = ${SRC_DIR}/jsonselect.js
 DIST = ${DIST_DIR}/jsonselect.js
 DIST_MIN = ${DIST_DIR}/jsonselect.min.js
 
-${DIST_DIR}:
-	@@mkdir -p ${DIST_DIR}
-
 all: hint project min
 	@@echo "Project build complete."
+
+${DIST_DIR}:
+	@@mkdir -p ${DIST_DIR}
 
 project: ${DIST}
 
