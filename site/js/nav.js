@@ -17,6 +17,9 @@ $(document).ready(function() {
         } else if (location.hash === '#overview' || location.hash === '') {
             $("#main > .content").hide();
             $("#splash").fadeIn(400);
+        } else if (location.hash === '#code' || location.hash === '') {
+            $("#main > .content").hide();
+            $("#code").fadeIn(400);
         } else if (location.hash.substr(0,5) === "#docs") {
             function showIt() {
                 var where = window.location.hash.substr(6);

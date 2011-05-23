@@ -172,7 +172,11 @@ pre.doc {
     width: 300px;
 }
 
-#cred {
+#cred, #code {
     padding-top: 2em;
 }
 
+p.psst {
+    margin-top: 3em;
+    font-size: .9em;
+}
