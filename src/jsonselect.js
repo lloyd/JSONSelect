@@ -204,7 +204,7 @@
         var a = (sel[0] === ",") ? sel.slice(1) : [sel],
         a0 = [],
         call = false,
-        i = 0, j = 0, l = 0, k, x;
+        i = 0, j = 0, k, x;
         for (i = 0; i < a.length; i++) {
             x = mn(obj, a[i], id, num, tot);
             if (x[0]) {
@@ -223,20 +223,9 @@
                     forEach(a0, obj[i], fun, undefined, i, obj.length);
                 }
             } else {
-                // it's a shame to do this for :last-child and other
-                // properties which count from the end when we don't
-                // even know if they're present.  Also, the stream
-                // parser is going to be pissed.
-                l = 0;
                 for (k in obj) {
                     if (obj.hasOwnProperty(k)) {
-                        l++;
-                    }
-                }
-                i = 0;
-                for (k in obj) {
-                    if (obj.hasOwnProperty(k)) {
-                        forEach(a0, obj[k], fun, k, i++, l);
+                        forEach(a0, obj[k], fun, k);
                     }
                 }
             }
