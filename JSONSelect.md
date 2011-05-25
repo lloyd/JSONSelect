@@ -22,9 +22,9 @@ expressions are patterns which can be matched against JSON documents.
 
 Potential applications of JSONSelect include:
 
-  *. Simplified programmatic matching of nodes within JSON documents.
-  *. Stream filtering, allowing efficient and incremental matching of documents.
-  *. As a query language for a document database.
+  * Simplified programmatic matching of nodes within JSON documents.
+  * Stream filtering, allowing efficient and incremental matching of documents.
+  * As a query language for a document database.
 
 ## Levels<a name="levels"></a>
 
