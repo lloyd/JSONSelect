@@ -17,8 +17,8 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
 
 ## Introduction<a name="introduction"></a>
 
-JSONSelect defines a language very simliar in syntax and structure to 
-[CSS3 Selectors](http://www.w3.org/TR/css3-selectors/).  JSONSelect 
+JSONSelect defines a language very similar in syntax and structure to
+[CSS3 Selectors](http://www.w3.org/TR/css3-selectors/).  JSONSelect
 expressions are patterns which can be matched against JSON documents.
 
 Potential applications of JSONSelect include:
@@ -30,13 +30,13 @@ Potential applications of JSONSelect include:
 ## Levels<a name="levels"></a>
 
 The specification of JSONSelect is broken into three levels.  Higher
-levels include more powerful language constructs, and are likewise more
+levels include more powerful constructs, and are likewise more
 complicated to implement and use.
 
-**JSONSelect Level 1** is a small subset of CSS3.  Every feature in 
-JSONSelect is derived from a CSS construct that directly maps to JSON..
-A level 1 implementation is not particularly complicated provides and
-basic querying features.
+**JSONSelect Level 1** is a small subset of CSS3.  Every feature is
+derived from a CSS construct that directly maps to JSON.  A level 1
+implementation is not particularly complicated while providing basic
+querying features.
 
 **JSONSelect Level 2** builds upon Level 1 adapting more complex CSS
 constructs which allow expressions to include constraints such as
@@ -44,9 +44,9 @@ patterns that match against values, and those which consider a node's
 siblings.  Level 2 is still a direct adaptation of CSS, but includes
 constructs whose semantic meaning is significantly changed.
 
-**JSONSelect Level 3** adds constructs which do not neccesarily have a 
+**JSONSelect Level 3** adds constructs which do not necessarily have a
 direct analog in CSS, and are added to increase the power and convenience
-of the selector language.  These include aliases, wholly new pseudo 
+of the selector language.  These include aliases, wholly new pseudo
 class functions, and more blue sky dreaming.
 
 ## Language Overview<a name="overview"></a>
@@ -191,10 +191,10 @@ See [https://github.com/lloyd/JSONSelect/tree/master/tests](https://github.com/l
 
 In no particular order.
 
-  * http://json.org/
-  * http://www.w3.org/TR/css3-selectors/
-  * http://ejohn.org/blog/selectors-that-people-actually-use/
-  * http://shauninman.com/archive/2008/05/05/css_qualified_selectors
-  * http://snook.ca/archives/html_and_css/css-parent-selectors
-  * http://remysharp.com/2010/10/11/css-parent-selector/
-  * https://github.com/jquery/sizzle/wiki/Sizzle-Home
+  * [http://json.org/](http://json.org/)
+  * [http://www.w3.org/TR/css3-selectors/](  * http://www.w3.org/TR/css3-selectors/)
+  * [http://ejohn.org/blog/selectors-that-people-actually-use/](http://ejohn.org/blog/selectors-that-people-actually-use/)
+  * [http://shauninman.com/archive/2008/05/05/css\_qualified\_selectors](  * http://shauninman.com/archive/2008/05/05/css_qualified_selectors)
+  * [http://snook.ca/archives/html\_and\_css/css-parent-selectors](http://snook.ca/archives/html_and_css/css-parent-selectors)
+  * [http://remysharp.com/2010/10/11/css-parent-selector/](http://remysharp.com/2010/10/11/css-parent-selector/)
+  * [https://github.com/jquery/sizzle/wiki/Sizzle-Home](https://github.com/jquery/sizzle/wiki/Sizzle-Home)
