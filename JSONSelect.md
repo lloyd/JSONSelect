@@ -13,6 +13,7 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
   1. [planned additions](#additions)
   1. [grammar](#grammar)
   1. [conformance tests](#tests)
+  1. [references](#references)
 
 ## Introduction<a name="introduction"></a>
 
@@ -185,3 +186,15 @@ class functions, and more blue sky dreaming.
 ## Conformance Tests<a name="tests"></a>
 
 See [https://github.com/lloyd/JSONSelect/tree/master/tests](https://github.com/lloyd/JSONSelect/tree/master/tests).
+
+## References<a name="references"></a>
+
+In no particular order.
+
+  * http://json.org/
+  * http://www.w3.org/TR/css3-selectors/
+  * http://ejohn.org/blog/selectors-that-people-actually-use/
+  * http://shauninman.com/archive/2008/05/05/css_qualified_selectors
+  * http://snook.ca/archives/html_and_css/css-parent-selectors
+  * http://remysharp.com/2010/10/11/css-parent-selector/
+  * https://github.com/jquery/sizzle/wiki/Sizzle-Home
