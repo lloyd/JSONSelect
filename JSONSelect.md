@@ -64,11 +64,11 @@ class functions, and more blue sky dreaming.
 <tr><td>T:last-child</td><td>A node of type T which is the last child of an array parent (equivalent to T:nth-last-child(1)</td><td>2</td></tr>
 <tr><td>T:only-child</td><td>A node of type T which is the only child of an array parent</td><td>2</td></tr>
 <tr><td>T:empty</td><td>A node of type T which is an array or object with no child</td><td>2</td></tr>
-<tr><td>T U</td><td>A node of type U with an anscestor of type T</td><td>1</td></tr>
+<tr><td>T U</td><td>A node of type U with an ancestor of type T</td><td>1</td></tr>
 <tr><td>T > U</td><td>A node of type U with a parent of type T</td><td>1</td></tr>
 <tr><td>T ~ U</td><td>A node of type U with a sibling of type T</td><td>2</td></tr>
-<tr><td>S1, S2</td><td>Any node which matches either pattern S1 or pattern S2</td><td>1</td></tr>
-<tr><td>T:has(S)</td><td>A node T which has a child node satisfying the selector S</td><td>3</td></tr>
+<tr><td>S1, S2</td><td>Any node which matches either selector S1 or S2</td><td>1</td></tr>
+<tr><td>T:has(S)</td><td>A node of type T which has a child node satisfying the selector S</td><td>3</td></tr>
 </table>
 
 **NOTE:** Not all of the constructs on the above table are necessarily implemented in the reference implementation at the moment.
