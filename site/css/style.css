@@ -85,6 +85,24 @@ div#tryit {
     margin-top: 140px;
 }
 
+#doc table {
+    width: 100%;
+}
+
+#doc table th {
+    background-color: #aaa;
+    color: #333;
+    padding: 10px;
+}
+
+#doc table tr td:first-child {
+    font-family: "andale mono",monospace;
+}
+
+#doc table td {
+    padding-top: 3px;
+}
+
 #splash .sample tt {
     font-size: 90%;
     padding: 0 .2em 0 .2em;

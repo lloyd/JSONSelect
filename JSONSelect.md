@@ -51,23 +51,27 @@ class functions, and more blue sky dreaming.
 
 ## Language Overview<a name="overview"></a>
 
-  * `string` -- type selectors
-  * `*` -- the universal type selector
-  * `.foo` -- Class selectors, which match against object keys
-  * `."a string"` -- Class selectors, but quoted as JSON-strings
-  * Several structural pseudo-classes:
-    * `:root` - the root pseudo class
-    * `:nth-child()` - the nth-child class that matches object
-      values and array elements
-    * `:nth-last-child()` - the inverse of `:nth-child()`
-    * `:first-child` - the first child of an array or object
-    * `:last-child` - the last child of an array or object
-    * `:only-child` - the only child of an array or object
-    * `:empty` - the empty pseudo class matching arrays or objects
-      without children
-  * `string, number` -- a grouping operator
-  * `object string` -- a descendant combinator
-  * `.bar > string` -- a child combinator
+<table>
+<tr><th>pattern</th><th>meaning</th><th>level</th></tr>
+<tr><td>*</td><td>Any node</td><td>1</td></tr>
+<tr><td>T</td><td>A node of type T, where T is one string, number, object, array, boolean, or null</td><td>1</td></tr>
+<tr><td>T.key</td><td>A node of type T which is the child of an object and is the value its parents key property</td><td>1</td></tr>
+<tr><td>T."complex key"</td><td>Same as previous, but with property name specified as a JSON string</td><td>1</td></tr>
+<tr><td>T:root</td><td>A node of type T which is the root of the JSON document</td><td>1</td></tr>
+<tr><td>T:nth-child(n)</td><td>A node of type T which is the nth child of an array parent</td><td>1</td></tr>
+<tr><td>T:nth-last-child(n)</td><td>A node of type T which is the nth child of an array parent counting from the end</td><td>2</td></tr>
+<tr><td>T:first-child</td><td>A node of type T which is the first child of an array parent (equivalent to T:nth-child(1)</td><td>1</td></tr>
+<tr><td>T:last-child</td><td>A node of type T which is the last child of an array parent (equivalent to T:nth-last-child(1)</td><td>2</td></tr>
+<tr><td>T:only-child</td><td>A node of type T which is the only child of an array parent</td><td>2</td></tr>
+<tr><td>T:empty</td><td>A node of type T which is an array or object with no child</td><td>2</td></tr>
+<tr><td>T U</td><td>A node of type U with an anscestor of type T</td><td>1</td></tr>
+<tr><td>T > U</td><td>A node of type U with a parent of type T</td><td>1</td></tr>
+<tr><td>T ~ U</td><td>A node of type U with a sibling of type T</td><td>2</td></tr>
+<tr><td>S1, S2</td><td>Any node which matches either pattern S1 or pattern S2</td><td>1</td></tr>
+<tr><td>T:has(S)</td><td>A node T which has a child node satisfying the selector S</td><td>3</td></tr>
+</table>
+
+**NOTE:** Not all of the constructs on the above table are necessarily implemented in the reference implementation at the moment.
 
 ## Grouping<a name="grouping"></a>
 
@@ -79,15 +83,9 @@ class functions, and more blue sky dreaming.
 
 ## Planned Additions<a name="additions"></a>
 
-  * `boolean.enabled ~ .email` -- a general sibling operator,
-    *without the ordering requirement*
-  * `:not()`
-  * `:has()`
-  * `[=value]` a node with a value of exactly `value`
-  * `[^=value]` a node whose value starts with `value`
-  * `[$=value]` a node whose value ends with `value`
-  * `[*=value]` a node whose value contains the substring `value`
-
+  * (in level 3) A means of matching against node values.  Such as `string:val("Bulgarian")`, or even `string:expr(x = "Bulgarian")` or maybe
+    number:expr(10 < x < 10)
+  * as little else as I can get away with.
 
 ## Grammar<a name="grammar"></a>
 
