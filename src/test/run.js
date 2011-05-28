@@ -37,16 +37,18 @@ function runOneSync(name, selname, p) {
 
 function runTests() {
     console.log("Running Tests:"); 
-    for (var d in tests) {
-        console.log("  tests against '" + d + ".json`:");
-        for (var i = 0; i < tests[d].length; i++) {
-            sys.print("    " + tests[d][i][0] + ": ");
-            try {
-                runOneSync(d, tests[d][i][0], tests[d][i][1]);
-                numPassed++;
-                console.log("pass");
-            } catch (e) {
-                console.log("fail (" + e.toString() + ")");
+    for (var l in tests) {
+        for (var d in tests[l]) {
+            console.log("  level " + l + " tests against \"" + d + ".json\":");
+            for (var i = 0; i < tests[l][d].length; i++) {
+                sys.print("    " + tests[l][d][i][0] + ": ");
+                try {
+                    runOneSync(d, tests[l][d][i][0], tests[l][d][i][1]);
+                    numPassed++;
+                    console.log("pass");
+                } catch (e) {
+                    console.log("fail (" + e.toString() + ")");
+                }
             }
         }
     }
@@ -60,14 +62,18 @@ var pathToTests = path.join(__dirname, "tests");
 fs.readdirSync(pathToTests).forEach(function(subdir) {
     var p = path.join(pathToTests, subdir);
     if (!fs.statSync(p).isDirectory()) return;
+    var l = /^level_([\d+])$/.exec(subdir);
+    if (!l) return;
+    l = l[1];
     var files = fs.readdirSync(p);
     for (var i = 0; i < files.length; i++) {
         var f = files[i];
         var m = /^([A-Za-z]+)_(.+)\.selector$/.exec(f);
         if (m) {
-            if (!tests.hasOwnProperty(m[1])) tests[m[1]] = [];
+            if (!tests.hasOwnProperty(l)) tests[l] = [];
+            if (!tests[l].hasOwnProperty(m[1])) tests[l][m[1]] = [];
             numTests++;
-            tests[m[1]].push([m[2], p]);
+            tests[l][m[1]].push([m[2], p]);
         }
     }
 });
