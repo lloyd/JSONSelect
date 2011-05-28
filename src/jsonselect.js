@@ -20,15 +20,18 @@
 
     // emitted error codes.
     var errorCodes = {
-        "ijs": "invalid json string",
-        "mpc": "multiple pseudo classes (:xxx) not allowed",
+        "ijs":  "invalid json string",
+        "mcp":  "missing closing paren",
+        "mpc":  "multiple pseudo classes (:xxx) not allowed",
         "mepf": "malformed expression in pseudo-function",
-        "nmi": "multiple ids not allowed",
-        "se": "selector expected",
-        "sra": "string required after '.'",
-        "uc": "unrecognized char",
-        "ujs": "unclosed json string",
-        "upc": "unrecognized pseudo class"
+        "nmi":  "multiple ids not allowed",
+        "se":   "selector expected",
+        "sra":  "string required after '.'",
+        "uc":   "unrecognized char",
+        "ucp":  "unexpected closing paren",
+        "ujs":  "unclosed json string",
+        "upc":  "unrecognized pseudo class",
+        "pex":  "opening paren expected '('"
     };
 
     // throw an error message
@@ -44,7 +47,7 @@
         str: 4 // string
     };
 
-    var pat = /^(?:([\r\n\t\ ]+)|([*.,>])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
+    var pat = /^(?:([\r\n\t\ ]+)|([*.,>\)\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
     var exprPat = /^\s*\(\s*(?:([+\-]?)([0-9]*)n\s*(?:([+\-])\s*([0-9]))?|(odd|even)|([+\-]?[0-9]+))\s*\)/;
     var lex = function (str, off) {
         if (!off) off = 0;
@@ -66,8 +69,9 @@
 
     // THE PARSER
 
-    var parse = function (str) {
-        var a = [], off = 0, am;
+    var parse = function (str, off, nested) {
+        var a = [], am, readParen;
+        if (!off) off = 0; 
 
         while (true) {
             var s = parse_selector(str, off);
@@ -84,10 +88,16 @@
                 else am.push(a);
                 a = [];
                 off = s[0];
+            } else if (s[1] === ")") {
+                if (!nested) te("ucp");
+                readParen = 1;
+                off = s[0];
+                break;
             }
         }
+        if (nested && !readParen) te("mcp");
         if (am) am.push(a);
-        return am ? am : a;
+        return [off, am ? am : a];
     };
 
     var parse_selector = function(str, off) {
@@ -129,21 +139,32 @@
                     s.pc = l[2];
                 }
             } else if (l[1] === toks.psf) {
-                if (s.pc || s.pf ) te("mpc");
-                s.pf = l[2];
-                var m = exprPat.exec(str.substr(l[0]));
-                if (!m) te("mepf");
-                if (m[5]) {
-                    s.a = 2;
-                    s.b = (m[5] === "odd") ? 1 : 0;
-                } else if (m[6]) {
-                    s.a = 0;
-                    s.b = parseInt(m[6], 10);
+                if (l[2] === ":has") {
+                    // any amount of whitespace, followed by paren
+                    l = lex(str, (off = l[0]));
+                    if (l && l[1] === " ") l = lex(str, off = l[0]);
+                    if (!l || l[1] !== "(") te("pex");
+                    var h = parse(str, l[0], true);
+                    l[0] = h[0];
+                    if (!s.has) s.has = [];
+                    s.has.push(h[1]);
                 } else {
-                    s.a = parseInt((m[1] ? m[1] : "+") + (m[2] ? m[2] : "1"),10);
-                    s.b = m[3] ? parseInt(m[3] + m[4],10) : 0;
+                    if (s.pc || s.pf ) te("mpc");
+                    s.pf = l[2];
+                    var m = exprPat.exec(str.substr(l[0]));
+                    if (!m) te("mepf");
+                    if (m[5]) {
+                        s.a = 2;
+                        s.b = (m[5] === "odd") ? 1 : 0;
+                    } else if (m[6]) {
+                        s.a = 0;
+                        s.b = parseInt(m[6], 10);
+                    } else {
+                        s.a = parseInt((m[1] ? m[1] : "+") + (m[2] ? m[2] : "1"),10);
+                        s.b = m[3] ? parseInt(m[3] + m[4],10) : 0;
+                    }
+                    l[0] += m[0].length;
                 }
-                l[0] += m[0].length;
             } else {
                 break;
             }
@@ -187,7 +208,19 @@
                 m = (!mod && ((num*cs.a + cs.b) >= 0));
             }
         }
-
+        if (m && cs.has) {
+            for (var i = 0; i < cs.has.length; i++) {
+                try {
+                    forEach(cs.has[i], node, function() {
+                        throw 42;
+                    });
+                } catch (e) {
+                    if (e === 42) continue;
+                }
+                m = false;
+                break;
+            }
+        }
         // should we repeat this selector for descendants?
         if (sel[0] !== ">" && sel[0].pc !== ":root") sels.push(sel);
 
@@ -245,7 +278,7 @@
 
     function compile(sel) {
         return {
-            sel: parse(sel),
+            sel: parse(sel)[1],
             match: function(obj){
                 return match(this.sel, obj);
             },

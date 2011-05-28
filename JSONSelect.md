@@ -129,6 +129,7 @@ class functions, and more blue sky dreaming.
       /* occur only in the last simple_selector_sequence. */
       : `:` pseudo_class_name
       | `:` pseudo_function_name `(` expression `)`
+      | `:has` `(`  selectors_group `)`
       ;
 
     pseudo_class_name

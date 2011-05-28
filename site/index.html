@@ -55,7 +55,8 @@
         },
         {
             "language": "English",
-            "level": "native"
+            "level": "native",
+            "preferred": true    
         },
         {
             "language": "Spanish",
@@ -78,7 +79,8 @@
           <div class="title"> Choose A Selector... </div>
           <div class="selector">.languagesSpoken .language</div>
           <div class="selector">.drinkPreference :first-child</div>
-          <div class="selector">.name > *</div>
+          <div class="selector">:has(.preferred) > .language</div>
+          <div class="selector">.seatingPreference :nth-child(1)</div>
           <div class="selector">.seatingPreference :nth-child(1)</div>
           <div class="selector">string:first-child</div>
           <div class="selector">."weight"</div>
