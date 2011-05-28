@@ -25,4 +25,9 @@ This repository is the home to many things related to JSONSelect:
   * [Documentation](https://github.com/lloyd/JSONSelect/blob/master/JSONSelect.md) which describes the language
   * The [jsonselect.org](http://jsonselect.org) [site source](https://github.com/lloyd/JSONSelect/blob/master/site/)
   * A [reference implementation](https://github.com/lloyd/JSONSelect/blob/master/src/jsonselect.js) in JavaScript
-  * [Conformance tests](https://github.com/lloyd/JSONSelect/blob/master/tests/) to help JSONSelect implementors along.
+
+## Related projects
+
+Conformance tests are broken out into a [separate
+repository](https://github.com/lloyd/JSONSelectTests) and may be used
+by other implementations.
