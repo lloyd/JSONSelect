@@ -209,11 +209,12 @@
             }
         }
         if (m && cs.has) {
+            // perhaps we should augment forEach to handle a return value
+            // that indicates "client cancels traversal"?
+            var bail = function() { throw 42; };
             for (var i = 0; i < cs.has.length; i++) {
                 try {
-                    forEach(cs.has[i], node, function() {
-                        throw 42;
-                    });
+                    forEach(cs.has[i], node, bail);
                 } catch (e) {
                     if (e === 42) continue;
                 }
