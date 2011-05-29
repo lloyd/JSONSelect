@@ -28,9 +28,14 @@ function runOneSync(name, selname, p) {
     var got = "";
     var sel = String(fs.readFileSync(selDocPath)).trim();
 
-    jsonselect.forEach(sel, obj, function(m) {
-        got += JSON.stringify(m, undefined, 4) + "\n";
-    });
+    try {
+        jsonselect.forEach(sel, obj, function(m) {
+            got += JSON.stringify(m, undefined, 4) + "\n";
+        });
+    } catch(e) {
+        got = e.toString();
+        if (want.trim() != got.trim()) throw e;
+    }
     if (want.trim() != got.trim()) throw "mismatch";
 }
 
