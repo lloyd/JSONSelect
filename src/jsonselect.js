@@ -31,7 +31,6 @@
         "ucp":  "unexpected closing paren",
         "ujs":  "unclosed json string",
         "upc":  "unrecognized pseudo class",
-        "hne":  ":has() not yet implemented",
         "pex":  "opening paren expected '('"
     };
 
@@ -210,7 +209,17 @@
             }
         }
         if (m && cs.has) {
-            te("hne");
+            for (var i = 0; i < cs.has.length; i++) {
+                try {
+                    forEach(cs.has[i], node, function() {
+                        throw 42;
+                    });
+                } catch (e) {
+                    if (e === 42) continue;
+                }
+                m = false;
+                break;
+            }
         }
         // should we repeat this selector for descendants?
         if (sel[0] !== ">" && sel[0].pc !== ":root") sels.push(sel);
