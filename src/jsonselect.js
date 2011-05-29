@@ -20,18 +20,19 @@
 
     // emitted error codes.
     var errorCodes = {
-        "ijs": "invalid json string",
-        "mcp": "missing closing paren",
-        "mpc": "multiple pseudo classes (:xxx) not allowed",
+        "ijs":  "invalid json string",
+        "mcp":  "missing closing paren",
+        "mpc":  "multiple pseudo classes (:xxx) not allowed",
         "mepf": "malformed expression in pseudo-function",
-        "nmi": "multiple ids not allowed",
-        "se": "selector expected",
-        "sra": "string required after '.'",
-        "uc": "unrecognized char",
-        "ucp": "unexpected closing paren",
-        "ujs": "unclosed json string",
-        "upc": "unrecognized pseudo class",
-        "hne": ":has() not yet implemented"
+        "nmi":  "multiple ids not allowed",
+        "se":   "selector expected",
+        "sra":  "string required after '.'",
+        "uc":   "unrecognized char",
+        "ucp":  "unexpected closing paren",
+        "ujs":  "unclosed json string",
+        "upc":  "unrecognized pseudo class",
+        "hne":  ":has() not yet implemented",
+        "pex":  "opening paren expected '('"
     };
 
     // throw an error message
@@ -47,7 +48,7 @@
         str: 4 // string
     };
 
-    var pat = /^(?:([\r\n\t\ ]+)|([*.,>\)])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
+    var pat = /^(?:([\r\n\t\ ]+)|([*.,>\)\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
     var exprPat = /^\s*\(\s*(?:([+\-]?)([0-9]*)n\s*(?:([+\-])\s*([0-9]))?|(odd|even)|([+\-]?[0-9]+))\s*\)/;
     var lex = function (str, off) {
         if (!off) off = 0;
@@ -141,8 +142,9 @@
             } else if (l[1] === toks.psf) {
                 if (l[2] === ":has") {
                     // any amount of whitespace, followed by paren
-                    // XXX
-                    l[0] += 1;
+                    l = lex(str, (off = l[0]));
+                    if (l && l[1] === " ") l = lex(str, off = l[0]);
+                    if (!l || l[1] !== "(") te("pex");
                     var h = parse(str, l[0], true);
                     l[0] += h[0];
                     if (!s.has) s.has = [];
