@@ -145,7 +145,7 @@
                     if (l && l[1] === " ") l = lex(str, off = l[0]);
                     if (!l || l[1] !== "(") te("pex");
                     var h = parse(str, l[0], true);
-                    l[0] += h[0];
+                    l[0] = h[0];
                     if (!s.has) s.has = [];
                     s.has.push(h[1]);
                 } else {
