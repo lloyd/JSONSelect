@@ -11,7 +11,6 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
   1. [pseudo classes](#pseudo)
   1. [expressions](#expressions)
   1. [combinators](#combinators)
-  1. [planned additions](#additions)
   1. [grammar](#grammar)
   1. [conformance tests](#tests)
   1. [references](#references)
@@ -75,7 +74,8 @@ class functions, and more blue sky dreaming.
 <tr><td>T:contains(S)</td><td>A node of type T with a string value contains the substring S</td><td>3</td></tr>
 </table>
 
-**NOTE:** Not all of the constructs on the above table are necessarily implemented in the reference implementation at the moment.
+**NOTE:** Not all of the constructs on the above table are necessarily implemented in the reference implementation at the moment
+(specifically, the `~` operator is pending implementation).
 
 ## Grouping<a name="grouping"></a>
 
@@ -86,11 +86,6 @@ class functions, and more blue sky dreaming.
 ## Expressions<a name="expressions"></a>
 
 ## Combinators<a name="combinators"></a>
-
-## Planned Additions<a name="additions"></a>
-
-  * add a :val(V) alias which is equivalent to :expr(x = V)
-  * add a :contains(V) alias which is equivalent to :expr(x *= V)
 
 ## Grammar<a name="grammar"></a>
 
