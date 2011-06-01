@@ -54,7 +54,7 @@
 
     var pat = /^(?:([\r\n\t\ ]+)|([*.,>\)\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has|expr|val|contains))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
     var nthPat = /^\s*\(\s*(?:([+\-]?)([0-9]*)n\s*(?:([+\-])\s*([0-9]))?|(odd|even)|([+\-]?[0-9]+))\s*\)/;
-    var lex = function (str, off) {
+    function lex(str, off) {
         if (!off) off = 0;
         var m = pat.exec(str.substr(off));
         if (!m) return undefined;
@@ -70,7 +70,7 @@
         else if (m[8]) te("ujs");
         else if (m[9]) a = [off, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
         return a;
-    };
+    }
 
     // THE EXPRESSION SUBSYSTEM
 
@@ -190,7 +190,7 @@
 
     // THE PARSER
 
-    var parse = function (str, off, nested) {
+    function parse(str, off, nested) {
         var a = [], am, readParen;
         if (!off) off = 0; 
 
@@ -219,9 +219,9 @@
         if (nested && !readParen) te("mcp");
         if (am) am.push(a);
         return [off, am ? am : a];
-    };
+    }
 
-    var parse_selector = function(str, off) {
+    function parse_selector(str, off) {
         var soff = off;
         var s = { };
         var l = lex(str, off);
@@ -314,7 +314,7 @@
         if (soff === off) te("se");
 
         return [off, s];
-    };
+    }
 
     // THE EVALUATOR
 
