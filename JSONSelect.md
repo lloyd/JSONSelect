@@ -131,6 +131,8 @@ class functions, and more blue sky dreaming.
       | `:` nth_function_name `(` nth_expression `)`
       | `:has` `(`  selectors_group `)`
       | `:expr` `(`  expr `)`
+      | `:contains` `(`  json_string `)`
+      | `:val` `(` val `)`
       ;
 
     pseudo_class_name
