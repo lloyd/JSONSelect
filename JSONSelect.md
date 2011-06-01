@@ -202,7 +202,7 @@ class functions, and more blue sky dreaming.
 
 ## Conformance Tests<a name="tests"></a>
 
-See [https://github.com/lloyd/JSONSelect/tree/master/tests](https://github.com/lloyd/JSONSelect/tree/master/tests).
+See [https://github.com/lloyd/JSONSelectTests](https://github.com/lloyd/JSONSelectTests)
 
 ## References<a name="references"></a>
 
