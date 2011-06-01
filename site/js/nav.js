@@ -9,7 +9,7 @@ $(document).ready(function() {
             $("#main > .content").hide();
             $("#tryit input").val("").keyup();
             $("#tryit").fadeIn(400, function() {
-                $("#tryit input").val(".languagesSpoken .language").keyup();
+                $("#tryit input").val(".languagesSpoken .lang").keyup();
             });
         } else if (location.hash === "#cred") {
             $("#main > .content").hide();
