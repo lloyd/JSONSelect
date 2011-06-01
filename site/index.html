@@ -50,16 +50,16 @@
     "favoriteColor": "yellow",
     "languagesSpoken": [
         {
-            "language": "Bulgarian",
+            "lang": "Bulgarian",
             "level": "advanced"
         },
         {
-            "language": "English",
+            "lang": "English",
             "level": "native",
-            "preferred": true    
+            "preferred": true
         },
         {
-            "language": "Spanish",
+            "lang": "Spanish",
             "level": "beginner"
         }
     ],
@@ -77,13 +77,14 @@
         </pre>
         <div class="selectors">
           <div class="title"> Choose A Selector... </div>
-          <div class="selector">.languagesSpoken .language</div>
+          <div class="selector">.languagesSpoken .lang</div>
           <div class="selector">.drinkPreference :first-child</div>
-          <div class="selector">:has(.preferred) > .language</div>
+          <div class="selector">:has(.preferred) > .lang</div>
+          <div class="selector">:has(.lang:val("Spanish")) > .level</div>
           <div class="selector">.seatingPreference :nth-child(1)</div>
           <div class="selector">string:first-child</div>
           <div class="selector">."weight"</div>
-          <div class="selector">.language</div>
+          <div class="selector">.lang</div>
           <div class="selector">.favoriteColor</div>
           <div class="selector">string.favoriteColor</div>
           <div class="selector">string:last-child</div>

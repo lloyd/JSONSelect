@@ -9,6 +9,7 @@ View or contribute to the latest version [on github](http://github.com/lloyd/JSO
   1. [grouping](#grouping)
   1. [selectors](#selectors)
   1. [pseudo classes](#pseudo)
+  1. [expressions](#expressions)
   1. [combinators](#combinators)
   1. [planned additions](#additions)
   1. [grammar](#grammar)
@@ -69,6 +70,9 @@ class functions, and more blue sky dreaming.
 <tr><td>T ~ U</td><td>A node of type U with a sibling of type T</td><td>2</td></tr>
 <tr><td>S1, S2</td><td>Any node which matches either selector S1 or S2</td><td>1</td></tr>
 <tr><td>T:has(S)</td><td>A node of type T which has a child node satisfying the selector S</td><td>3</td></tr>
+<tr><td>T:expr(E)</td><td>A node of type T with a value that satisfies the expression E</td><td>3</td></tr>
+<tr><td>T:val(V)</td><td>A node of type T with a value that is equal to V</td><td>3</td></tr>
+<tr><td>T:contains(S)</td><td>A node of type T with a string value contains the substring S</td><td>3</td></tr>
 </table>
 
 **NOTE:** Not all of the constructs on the above table are necessarily implemented in the reference implementation at the moment.
@@ -79,13 +83,14 @@ class functions, and more blue sky dreaming.
 
 ## Pseudo Classes<a name="pseudo"></a>
 
+## Expressions<a name="expressions"></a>
+
 ## Combinators<a name="combinators"></a>
 
 ## Planned Additions<a name="additions"></a>
 
-  * (in level 3) A means of matching against node values.  Such as `string:val("Bulgarian")`, or even `string:expr(x = "Bulgarian")` or maybe
-    number:expr(10 < x < 10)
-  * as little else as I can get away with.
+  * add a :val(V) alias which is equivalent to :expr(x = V)
+  * add a :contains(V) alias which is equivalent to :expr(x *= V)
 
 ## Grammar<a name="grammar"></a>
 
@@ -95,22 +100,22 @@ class functions, and more blue sky dreaming.
     selectors_group
       : selector [ `,` selector ]*
       ;
-    
+
     selector
       : simple_selector_sequence [ combinator simple_selector_sequence ]*
       ;
-    
+
     combinator
       : `>` | \s+
       ;
-    
+
     simple_selector_sequence
       /* why allow multiple HASH entities in the grammar? */
       : [ type_selector | universal ]
         [ hash | pseudo ]*
       | [ hash | pseudo ]+
       ;
-    
+
     type_selector
       : `object` | `array` | `number` | `string` | `boolean` | `null`
       ;
@@ -123,24 +128,40 @@ class functions, and more blue sky dreaming.
       : `.` name
       | `.` json_string
       ;
-    
+
     pseudo
       /* Note that pseudo-elements are restricted to one per selector and */
       /* occur only in the last simple_selector_sequence. */
       : `:` pseudo_class_name
-      | `:` pseudo_function_name `(` expression `)`
+      | `:` nth_function_name `(` nth_expression `)`
       | `:has` `(`  selectors_group `)`
+      | `:expr` `(`  expr `)`
       ;
 
     pseudo_class_name
       : `root` | `first-child` | `last-child` | `only-child`
-    
-    pseudo_function_name
+
+    nth_function_name
       : `nth-child` | `nth-last-child`
 
-    expression
+    nth_expression
       /* expression is and of the form "an+b" */
       : TODO
+      ;
+
+    expr
+      : expr binop expr
+      | '(' expr ')'
+      | val
+      ;
+
+    binop
+      : '*' | '/' | '%' | '+' | '-' | '<=' | '>=' | '$='
+      | '^=' | '*=' | '>' | '<' | '=' | '!=' | '&&' | '||'
+      ;
+
+    val
+      : json_number | json_string | 'true' | 'false' | 'null' | 'x'
       ;
 
     json_string
@@ -157,7 +178,7 @@ class functions, and more blue sky dreaming.
       |  `\n`
       |  `\r`
       |  `\t`
-      |   \u four-hex-digits 
+      |   \u four-hex-digits
       ;
 
     name
@@ -173,8 +194,8 @@ class functions, and more blue sky dreaming.
       | escape
       | nonascii
       ;
- 
-    escape 
+
+    escape
       : \\[^\r\n\f0-9a-fA-F]
       ;
 

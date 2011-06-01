@@ -20,18 +20,23 @@
 
     // emitted error codes.
     var errorCodes = {
+        "bop":  "binary operator expected",
+        "ee":   "expression expected",
+        "epex": "closing paren expected ')'",
         "ijs":  "invalid json string",
         "mcp":  "missing closing paren",
-        "mpc":  "multiple pseudo classes (:xxx) not allowed",
         "mepf": "malformed expression in pseudo-function",
+        "mexp": "multiple expressions not allowed",
+        "mpc":  "multiple pseudo classes (:xxx) not allowed",
         "nmi":  "multiple ids not allowed",
+        "pex":  "opening paren expected '('",
         "se":   "selector expected",
+        "sex":  "string expected",
         "sra":  "string required after '.'",
         "uc":   "unrecognized char",
         "ucp":  "unexpected closing paren",
         "ujs":  "unclosed json string",
-        "upc":  "unrecognized pseudo class",
-        "pex":  "opening paren expected '('"
+        "upc":  "unrecognized pseudo class"
     };
 
     // throw an error message
@@ -47,8 +52,8 @@
         str: 4 // string
     };
 
-    var pat = /^(?:([\r\n\t\ ]+)|([*.,>\)\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
-    var exprPat = /^\s*\(\s*(?:([+\-]?)([0-9]*)n\s*(?:([+\-])\s*([0-9]))?|(odd|even)|([+\-]?[0-9]+))\s*\)/;
+    var pat = /^(?:([\r\n\t\ ]+)|([*.,>\)\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has|expr|val|contains))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
+    var nthPat = /^\s*\(\s*(?:([+\-]?)([0-9]*)n\s*(?:([+\-])\s*([0-9]))?|(odd|even)|([+\-]?[0-9]+))\s*\)/;
     var lex = function (str, off) {
         if (!off) off = 0;
         var m = pat.exec(str.substr(off));
@@ -66,6 +71,122 @@
         else if (m[9]) a = [off, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
         return a;
     };
+
+    // THE EXPRESSION SUBSYSTEM
+
+    var exprPat = new RegExp(
+        // skip and don't capture leading whitespace
+        "^\\s*(?:" +
+            // (1) simple vals
+            "(true|false|null)|" + 
+            // (2) numbers
+            "(-?\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d+)?)|" +
+            // (3) strings
+            "(\"(?:[^\\]|\\[^\"])*\")|" +
+            // (4) the 'x' value placeholder
+            "(x)|" +
+            // (5) binops
+            "(&&|\\|\\||[\\$\\^<>!\\*]=|[=+\\-*/%<>])|" +
+            // (6) parens
+            "([\\(\\)])" +
+            ")"
+    );
+
+    function is(o, t) { return typeof o === t; }
+    var operators = {
+        '*':  [ 9, function(lhs, rhs) { return lhs * rhs; } ],
+        '/':  [ 9, function(lhs, rhs) { return lhs / rhs; } ],
+        '%':  [ 9, function(lhs, rhs) { return lhs % rhs; } ],
+        '+':  [ 7, function(lhs, rhs) { return lhs + rhs; } ],
+        '-':  [ 7, function(lhs, rhs) { return lhs - rhs; } ],
+        '<=': [ 5, function(lhs, rhs) { return is(lhs, 'number') && is(rhs, 'number') && lhs <= rhs; } ],
+        '>=': [ 5, function(lhs, rhs) { return is(lhs, 'number') && is(rhs, 'number') && lhs >= rhs; } ],
+        '$=': [ 5, function(lhs, rhs) { return is(lhs, 'string') && is(rhs, 'string') && lhs.lastIndexOf(rhs) === lhs.length - rhs.length; } ],
+        '^=': [ 5, function(lhs, rhs) { return is(lhs, 'string') && is(rhs, 'string') && lhs.indexOf(rhs) === 0; } ],
+        '*=': [ 5, function(lhs, rhs) { return is(lhs, 'string') && is(rhs, 'string') && lhs.indexOf(rhs) !== -1; } ],
+        '>':  [ 5, function(lhs, rhs) { return is(lhs, 'number') && is(rhs, 'number') && lhs > rhs; } ],
+        '<':  [ 5, function(lhs, rhs) { return is(lhs, 'number') && is(rhs, 'number') && lhs < rhs; } ],
+        '=':  [ 3, function(lhs, rhs) { return lhs === rhs; } ],
+        '!=': [ 3, function(lhs, rhs) { return lhs !== rhs; } ],
+        '&&': [ 2, function(lhs, rhs) { return lhs && rhs; } ],
+        '||': [ 1, function(lhs, rhs) { return lhs || rhs; } ]
+    };
+
+    function exprLex(str, off) {
+        var v, m = exprPat.exec(str.substr(off));
+        if (m) {
+            off += m[0].length;
+            v = m[1] || m[2] || m[3] || m[5] || m[6];
+            if (m[1] || m[2] || m[3]) return [off, 0, jsonParse(v)];
+            else if (m[4]) return [off, 0, undefined];
+            return [off, v];
+        }
+    }
+
+    function exprParse2(str, off) {
+        if (!off) off = 0;
+        // first we expect a value or a '('
+        var l = exprLex(str, off),
+            lhs;
+        if (l && l[1] === '(') {
+            lhs = exprParse2(str, l[0]);
+            var p = exprLex(str, lhs[0]);
+            if (!p || p[1] !== ')') te('epex');
+            off = p[0];
+            lhs = [ '(', lhs[1] ];
+        } else if (!l || (l[1] && l[1] != 'x')) {
+            te("ee");
+        } else {
+            lhs = ((l[1] === 'x') ? undefined : l[2]);
+            off = l[0];
+        }
+
+        // now we expect a binary operator or a ')'
+        var op = exprLex(str, off);
+        if (!op || op[1] == ')') return [off, lhs];
+        else if (op[1] == 'x' || !op[1]) {
+            te('bop');
+        }
+
+        // tail recursion to fetch the rhs expression
+        var rhs = exprParse2(str, op[0]);
+        off = rhs[0];
+        rhs = rhs[1];
+
+        // and now precedence!  how shall we put everything together?
+        var v;
+        if (typeof rhs !== 'object' || rhs[0] === '(' || operators[op[1]][0] < operators[rhs[1]][0] ) {
+            v = [lhs, op[1], rhs];
+        }
+        else {
+            v = rhs;
+            while (typeof rhs[0] === 'object' && rhs[0][0] != '(' && operators[op[1]][0] >= operators[rhs[0][1]][0]) {
+                rhs = rhs[0];
+            }
+            rhs[0] = [lhs, op[1], rhs[0]];
+        }
+        return [off, v];
+    }
+
+    function exprParse(str, off) {
+        function deparen(v) {
+            if (typeof v !== 'object' || v === null) return v;
+            else if (v[0] === '(') return deparen(v[1]);
+            else return [deparen(v[0]), v[1], deparen(v[2])];
+        }
+        var e = exprParse2(str, off ? off : 0);
+        return [e[0], deparen(e[1])];
+    }
+
+    function exprEval(expr, x) {
+        if (expr === undefined) return x;
+        else if (expr === null || typeof expr !== 'object') {
+            return expr;
+        }
+        var lhs = exprEval(expr[0], x),
+            rhs = exprEval(expr[2], x);
+        return operators[expr[1]][1](lhs, rhs);
+    }
 
     // THE PARSER
 
@@ -139,7 +260,20 @@
                     s.pc = l[2];
                 }
             } else if (l[1] === toks.psf) {
-                if (l[2] === ":has") {
+                if (l[2] === ":val" || l[2] === ":contains") {
+                    s.expr = [ undefined, l[2] === ":val" ? "=" : "*=", undefined];
+                    // any amount of whitespace, followed by paren, string, paren
+                    l = lex(str, (off = l[0]));
+                    if (l && l[1] === " ") l = lex(str, off = l[0]);
+                    if (!l || l[1] !== "(") te("pex");
+                    l = lex(str, (off = l[0]));
+                    if (l && l[1] === " ") l = lex(str, off = l[0]);
+                    if (!l || l[1] !== toks.str) te("sex");
+                    s.expr[2] = l[2];
+                    l = lex(str, (off = l[0]));
+                    if (l && l[1] === " ") l = lex(str, off = l[0]);
+                    if (!l || l[1] !== ")") te("epex");
+                } else if (l[2] === ":has") {
                     // any amount of whitespace, followed by paren
                     l = lex(str, (off = l[0]));
                     if (l && l[1] === " ") l = lex(str, off = l[0]);
@@ -148,10 +282,15 @@
                     l[0] = h[0];
                     if (!s.has) s.has = [];
                     s.has.push(h[1]);
+                } else if (l[2] === ":expr") {
+                    if (s.expr) te("mexp");
+                    var e = exprParse(str, l[0]);
+                    l[0] = e[0];
+                    s.expr = e[1];
                 } else {
                     if (s.pc || s.pf ) te("mpc");
                     s.pf = l[2];
-                    var m = exprPat.exec(str.substr(l[0]));
+                    var m = nthPat.exec(str.substr(l[0]));
                     if (!m) te("mepf");
                     if (m[5]) {
                         s.a = 2;
@@ -221,6 +360,9 @@
                 m = false;
                 break;
             }
+        }
+        if (m && cs.expr) {
+            m = exprEval(cs.expr, node);
         }
         // should we repeat this selector for descendants?
         if (sel[0] !== ">" && sel[0].pc !== ":root") sels.push(sel);
