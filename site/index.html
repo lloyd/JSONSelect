@@ -79,6 +79,7 @@
           <div class="title"> Choose A Selector... </div>
           <div class="selector">.languagesSpoken .lang</div>
           <div class="selector">.drinkPreference :first-child</div>
+          <div class="selector">.seatingPreference :nth-child(1)</div>
           <div class="selector">."weight"</div>
           <div class="selector">.lang</div>
           <div class="selector">.favoriteColor</div>
@@ -93,7 +94,6 @@
           <div class="selector">.preferred ~ .lang</div>
           <div class="selector">:has(.lang:val("Spanish")) > .level</div>
           <div class="selector">.lang:val("Bulgarian") ~ .level</div>
-          <div class="selector">.seatingPreference :nth-child(1)</div>
           <div class="selector">.weight:expr(x<180) ~ .name .first</div>
         </div>
       </div>
