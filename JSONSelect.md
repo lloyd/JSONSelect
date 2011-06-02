@@ -74,9 +74,6 @@ class functions, and more blue sky dreaming.
 <tr><td>T:contains(S)</td><td>A node of type T with a string value contains the substring S</td><td>3</td></tr>
 </table>
 
-**NOTE:** Not all of the constructs on the above table are necessarily implemented in the reference implementation at the moment
-(specifically, the `~` operator is pending implementation).
-
 ## Grouping<a name="grouping"></a>
 
 ## Selectors<a name="selectors"></a>

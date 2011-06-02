@@ -79,10 +79,6 @@
           <div class="title"> Choose A Selector... </div>
           <div class="selector">.languagesSpoken .lang</div>
           <div class="selector">.drinkPreference :first-child</div>
-          <div class="selector">:has(.preferred) > .lang</div>
-          <div class="selector">:has(.lang:val("Spanish")) > .level</div>
-          <div class="selector">.seatingPreference :nth-child(1)</div>
-          <div class="selector">string:first-child</div>
           <div class="selector">."weight"</div>
           <div class="selector">.lang</div>
           <div class="selector">.favoriteColor</div>
@@ -93,8 +89,12 @@
           <div class="selector">string:nth-last-child(1)</div>
           <div class="selector">:root</div>
           <div class="selector">number</div>
-          <div class="selector">object</div>
-          <div class="selector">string</div>
+          <div class="selector">:has(:root > .preferred)</div>
+          <div class="selector">.preferred ~ .lang</div>
+          <div class="selector">:has(.lang:val("Spanish")) > .level</div>
+          <div class="selector">.lang:val("Bulgarian") ~ .level</div>
+          <div class="selector">.seatingPreference :nth-child(1)</div>
+          <div class="selector">.weight:expr(x<180) ~ .name .first</div>
         </div>
       </div>
       <div style="display: none" id="cred" class="content">
@@ -115,7 +115,7 @@ return undefined;</pre>
       </div>
       <div style="display: none" id="code" class="content">
         <p>Several different implementations of JSONSelect are available:</p>
-        <p class="item"><b>JavaScript:</b> Get it <a href="js/jsonselect.js">documented</a>, or <a href="js/jsonselect.min.js">minified</a> (<i>2.7k</i> minified and gzipped).
+        <p class="item"><b>JavaScript:</b> Get it <a href="js/jsonselect.js">documented</a>, or <a href="js/jsonselect.min.js">minified</a> (<i>2.9k</i> minified and gzipped).
            The code is <a href="https://github.com/lloyd/JSONSelect">on github</a>.</p>
         <p class="item"><b>node.js:</b> <tt>npm install JSONSelect</tt></p>
         <p class="item"><b>ruby:</b> A gem by <a href="https://github.com/fd">Simon Menke</a>: <a href="https://github.com/fd/json_select">https://github.com/fd/json_select</a></p>

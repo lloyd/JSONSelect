@@ -41,7 +41,7 @@
 
     // throw an error message
     function te(ec) {
-        throw new Error(errorCodes[ec]);
+      throw new Error(errorCodes[ec]);
     }
 
     // THE LEXER
@@ -52,7 +52,7 @@
         str: 4 // string
     };
 
-    var pat = /^(?:([\r\n\t\ ]+)|([*.,>\)\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has|expr|val|contains))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
+    var pat = /^(?:([\r\n\t\ ]+)|([~*.,>\)\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has|expr|val|contains))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
     var nthPat = /^\s*\(\s*(?:([+\-]?)([0-9]*)n\s*(?:([+\-])\s*([0-9]))?|(odd|even)|([+\-]?[0-9]+))\s*\)/;
     function lex(str, off) {
         if (!off) off = 0;
@@ -190,19 +190,22 @@
 
     // THE PARSER
 
-    function parse(str, off, nested) {
+    function parse(str, off, nested, hints) {
+        if (!nested) hints = {};
+
         var a = [], am, readParen;
         if (!off) off = 0; 
 
         while (true) {
-            var s = parse_selector(str, off);
+            var s = parse_selector(str, off, hints);
             a.push(s[1]);
             s = lex(str, off = s[0]);
             if (s && s[1] === " ") s = lex(str, off = s[0]);
             if (!s) break;
             // now we've parsed a selector, and have something else...
-            if (s[1] === ">") {
-                a.push(">");
+            if (s[1] === ">" || s[1] === "~") {
+                if (s[1] === "~") hints.usesSiblingOp = true;
+                a.push(s[1]);
                 off = s[0];
             } else if (s[1] === ",") {
                 if (am === undefined) am = [ ",", a ];
@@ -218,10 +221,63 @@
         }
         if (nested && !readParen) te("mcp");
         if (am) am.push(a);
-        return [off, am ? am : a];
+        var rv;
+        if (!nested && hints.usesSiblingOp) {
+            rv = normalize(am ? am : a);
+        } else {
+            rv = am ? am : a;
+        }
+        return [off, rv];
     }
 
-    function parse_selector(str, off) {
+    function normalizeOne(sel) {
+        var sels = [], s;
+        for (var i = 0; i < sel.length; i++) {
+            if (sel[i] === '~') {
+                // `A ~ B` maps to `:has(:root > A) > B`
+                // `Z A ~ B` maps to `Z :has(:root > A) > B, Z:has(:root > A) > B`
+                // This first clause, takes care of the first case, and the first half of the latter case.
+                if (i < 2 || sel[i-2] != '>') {
+                    s = sel.slice(0,i-1);
+                    s = s.concat([{has:[[{pc: ":root"}, ">", sel[i-1]]]}, ">"]);
+                    s = s.concat(sel.slice(i+1));
+                    sels.push(s);
+                }
+                // here we take care of the second half of above:
+                // (`Z A ~ B` maps to `Z :has(:root > A) > B, Z :has(:root > A) > B`)
+                // and a new case:
+                // Z > A ~ B maps to Z:has(:root > A) > B
+                if (i > 1) {
+                    var at = sel[i-2] === '>' ? i-3 : i-2;
+                    s = sel.slice(0,at);
+                    var z = {};
+                    for (var k in sel[at]) if (sel[at].hasOwnProperty(k)) z[k] = sel[at][k];
+                    if (!z.has) z.has = [];
+                    z.has.push([{pc: ":root"}, ">", sel[i-1]]);
+                    s = s.concat(z, '>', sel.slice(i+1));
+                    sels.push(s);
+                }
+                break;
+            }
+        }
+        if (i == sel.length) return sel;
+        return sels.length > 1 ? [','].concat(sels) : sels[0];
+    }
+
+    function normalize(sels) {
+        if (sels[0] === ',') {
+            var r = [","];
+            for (var i = i; i < sels.length; i++) {
+                var s = normalizeOne(s[i]);
+                r = r.concat(s[0] === "," ? s.slice(1) : s);
+            }
+            return r;
+        } else {
+            return normalizeOne(sels);
+        }
+    }
+
+    function parse_selector(str, off, hints) {
         var soff = off;
         var s = { };
         var l = lex(str, off);
@@ -441,5 +497,3 @@
     };
     exports.compile = compile;
 })(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
-
-
