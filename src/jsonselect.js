@@ -49,7 +49,8 @@
         psc: 1, // pseudo class
         psf: 2, // pseudo class function
         typ: 3, // type
-        str: 4 // string
+        str: 4, // string
+        ide: 5  // identifiers (or "classes", stuff after a dot)
     };
 
     // The primary lexing regular expression in jsonselect
@@ -67,12 +68,12 @@
         "(:(?:nth-child|nth-last-child|has|expr|val|contains))|" +
         // (6) bogusly named pseudo something or others
         "(:\\w+)|" +
-        // (7) JSON strings
-        "\\.(\\\"(?:[^\\\\]|\\\\[^\\\"])*\\\")|" +
+        // (7 & 8) identifiers and JSON strings
+        "(?:(\\.)?(\\\"(?:[^\\\\]|\\\\[^\\\"])*\\\"))|" +
         // (8) bogus JSON strings missing a trailing quote
         "(\\\")|" +
         // (9) identifiers (unquoted)
-        "\\.((?:[_a-zA-Z]|[^\\0-\\0177]|\\\\[^\\r\\n\\f0-9a-fA-F])(?:[_a-zA-Z0-9\\-]|[^\\u0000-\\u0177]|(?:\\\\[^\\r\\n\\f0-9a-fA-F]))*)" + 
+        "\\.((?:[_a-zA-Z]|[^\\0-\\0177]|\\\\[^\\r\\n\\f0-9a-fA-F])(?:[_a-zA-Z0-9\\-]|[^\\u0000-\\u0177]|(?:\\\\[^\\r\\n\\f0-9a-fA-F]))*)" +
         ")"
     );
 
@@ -90,9 +91,9 @@
         else if (m[4]) a = [off, toks.psc, m[0]];
         else if (m[5]) a = [off, toks.psf, m[0]];
         else if (m[6]) te("upc");
-        else if (m[7]) a = [off, toks.str, jsonParse(m[7])];
-        else if (m[8]) te("ujs");
-        else if (m[9]) a = [off, toks.str, m[9].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
+        else if (m[8]) a = [off, m[7] ? toks.ide : toks.str, jsonParse(m[8])];
+        else if (m[9]) te("ujs");
+        else if (m[10]) a = [off, toks.ide, m[10].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
         return a;
     }
 
@@ -320,7 +321,7 @@
         while (true) {
             if (l === undefined) {
                 break;
-            } else if (l[1] === toks.str) {
+            } else if (l[1] === toks.ide) {
                 if (s.id) te("nmi");
                 s.id = l[2];
             } else if (l[1] === toks.psc) {
