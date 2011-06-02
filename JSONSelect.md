@@ -104,8 +104,8 @@ class functions, and more blue sky dreaming.
     simple_selector_sequence
       /* why allow multiple HASH entities in the grammar? */
       : [ type_selector | universal ]
-        [ hash | pseudo ]*
-      | [ hash | pseudo ]+
+        [ class | pseudo ]*
+      | [ class | pseudo ]+
       ;
 
     type_selector
@@ -116,7 +116,7 @@ class functions, and more blue sky dreaming.
       : '*'
       ;
 
-    hash
+    class
       : `.` name
       | `.` json_string
       ;

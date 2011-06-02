@@ -52,7 +52,31 @@
         str: 4 // string
     };
 
-    var pat = /^(?:([\r\n\t\ ]+)|([~*.,>\)\(])|(string|boolean|null|array|object|number)|(:(?:root|first-child|last-child|only-child))|(:(?:nth-child|nth-last-child|has|expr|val|contains))|(:\w+)|(\"(?:[^\\]|\\[^\"])*\")|(\")|((?:[_a-zA-Z]|[^\0-\0177]|\\[^\r\n\f0-9a-fA-F])(?:[_a-zA-Z0-9\-]|[^\u0000-\u0177]|(?:\\[^\r\n\f0-9a-fA-F]))*))/;
+    // The primary lexing regular expression in jsonselect
+    var pat = new RegExp(
+        "^(?:" +
+        // (1) whitespace
+        "([\\r\\n\\t\\ ]+)|" +
+        // (2) one-char ops
+        "([~*,>\\)\\(])|" +
+        // (3) types names
+        "(string|boolean|null|array|object|number)|" +
+        // (4) pseudo classes
+        "(:(?:root|first-child|last-child|only-child))|" +
+        // (5) pseudo functions
+        "(:(?:nth-child|nth-last-child|has|expr|val|contains))|" +
+        // (6) bogusly named pseudo something or others
+        "(:\\w+)|" +
+        // (7) JSON strings
+        "\\.(\\\"(?:[^\\\\]|\\\\[^\\\"])*\\\")|" +
+        // (8) bogus JSON strings missing a trailing quote
+        "(\\\")|" +
+        // (9) identifiers (unquoted)
+        "\\.((?:[_a-zA-Z]|[^\\0-\\0177]|\\\\[^\\r\\n\\f0-9a-fA-F])(?:[_a-zA-Z0-9\\-]|[^\\u0000-\\u0177]|(?:\\\\[^\\r\\n\\f0-9a-fA-F]))*)" + 
+        ")"
+    );
+
+    // A regular expression for matching "nth expressions" (see grammar, what :nth-child() eats)
     var nthPat = /^\s*\(\s*(?:([+\-]?)([0-9]*)n\s*(?:([+\-])\s*([0-9]))?|(odd|even)|([+\-]?[0-9]+))\s*\)/;
     function lex(str, off) {
         if (!off) off = 0;
@@ -66,17 +90,17 @@
         else if (m[4]) a = [off, toks.psc, m[0]];
         else if (m[5]) a = [off, toks.psf, m[0]];
         else if (m[6]) te("upc");
-        else if (m[7]) a = [off, toks.str, jsonParse(m[0])];
+        else if (m[7]) a = [off, toks.str, jsonParse(m[7])];
         else if (m[8]) te("ujs");
-        else if (m[9]) a = [off, toks.str, m[0].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
+        else if (m[9]) a = [off, toks.str, m[9].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
         return a;
     }
 
     // THE EXPRESSION SUBSYSTEM
 
     var exprPat = new RegExp(
-        // skip and don't capture leading whitespace
-        "^\\s*(?:" +
+            // skip and don't capture leading whitespace
+            "^\\s*(?:" +
             // (1) simple vals
             "(true|false|null)|" + 
             // (2) numbers
@@ -296,9 +320,7 @@
         while (true) {
             if (l === undefined) {
                 break;
-            } else if (l[1] === ".") {
-                l = lex(str, (off = l[0]));
-                if (!l || l[1] !== toks.str) te("sra");
+            } else if (l[1] === toks.str) {
                 if (s.id) te("nmi");
                 s.id = l[2];
             } else if (l[1] === toks.psc) {
