@@ -14,7 +14,7 @@
           }
           return (new Function("return " + str))();
       } catch(e) {
-        te("ijs");
+        te("ijs", e.message);
       }
     }
 
@@ -40,8 +40,8 @@
     };
 
     // throw an error message
-    function te(ec) {
-      throw new Error(errorCodes[ec]);
+    function te(ec, context) {
+      throw new Error(errorCodes[ec] + " in '" + context + "'");
     }
 
     // THE LEXER
@@ -90,9 +90,9 @@
         else if (m[3]) a = [off, toks.typ, m[0]];
         else if (m[4]) a = [off, toks.psc, m[0]];
         else if (m[5]) a = [off, toks.psf, m[0]];
-        else if (m[6]) te("upc");
+        else if (m[6]) te("upc", str);
         else if (m[8]) a = [off, m[7] ? toks.ide : toks.str, jsonParse(m[8])];
-        else if (m[9]) te("ujs");
+        else if (m[9]) te("ujs", str);
         else if (m[10]) a = [off, toks.ide, m[10].replace(/\\([^\r\n\f0-9a-fA-F])/g,"$1")];
         return a;
     }
@@ -156,11 +156,11 @@
         if (l && l[1] === '(') {
             lhs = exprParse2(str, l[0]);
             var p = exprLex(str, lhs[0]);
-            if (!p || p[1] !== ')') te('epex');
+            if (!p || p[1] !== ')') te('epex', str);
             off = p[0];
             lhs = [ '(', lhs[1] ];
         } else if (!l || (l[1] && l[1] != 'x')) {
-            te("ee");
+            te("ee", str + " - " + ( l[1] && l[1] ));
         } else {
             lhs = ((l[1] === 'x') ? undefined : l[2]);
             off = l[0];
@@ -170,7 +170,7 @@
         var op = exprLex(str, off);
         if (!op || op[1] == ')') return [off, lhs];
         else if (op[1] == 'x' || !op[1]) {
-            te('bop');
+            te('bop', str + " - " + ( op[1] && op[1] ));
         }
 
         // tail recursion to fetch the rhs expression
@@ -238,13 +238,13 @@
                 a = [];
                 off = s[0];
             } else if (s[1] === ")") {
-                if (!nested) te("ucp");
+                if (!nested) te("ucp", s[1]);
                 readParen = 1;
                 off = s[0];
                 break;
             }
         }
-        if (nested && !readParen) te("mcp");
+        if (nested && !readParen) te("mcp", str);
         if (am) am.push(a);
         var rv;
         if (!nested && hints.usesSiblingOp) {
@@ -322,10 +322,10 @@
             if (l === undefined) {
                 break;
             } else if (l[1] === toks.ide) {
-                if (s.id) te("nmi");
+                if (s.id) te("nmi", l[1]);
                 s.id = l[2];
             } else if (l[1] === toks.psc) {
-                if (s.pc || s.pf) te("mpc");
+                if (s.pc || s.pf) te("mpc", l[1]);
                 // collapse first-child and last-child into nth-child expressions
                 if (l[2] === ":first-child") {
                     s.pf = ":nth-child";
@@ -344,33 +344,33 @@
                     // any amount of whitespace, followed by paren, string, paren
                     l = lex(str, (off = l[0]));
                     if (l && l[1] === " ") l = lex(str, off = l[0]);
-                    if (!l || l[1] !== "(") te("pex");
+                    if (!l || l[1] !== "(") te("pex", str);
                     l = lex(str, (off = l[0]));
                     if (l && l[1] === " ") l = lex(str, off = l[0]);
-                    if (!l || l[1] !== toks.str) te("sex");
+                    if (!l || l[1] !== toks.str) te("sex", str);
                     s.expr[2] = l[2];
                     l = lex(str, (off = l[0]));
                     if (l && l[1] === " ") l = lex(str, off = l[0]);
-                    if (!l || l[1] !== ")") te("epex");
+                    if (!l || l[1] !== ")") te("epex", str);
                 } else if (l[2] === ":has") {
                     // any amount of whitespace, followed by paren
                     l = lex(str, (off = l[0]));
                     if (l && l[1] === " ") l = lex(str, off = l[0]);
-                    if (!l || l[1] !== "(") te("pex");
+                    if (!l || l[1] !== "(") te("pex", str);
                     var h = parse(str, l[0], true);
                     l[0] = h[0];
                     if (!s.has) s.has = [];
                     s.has.push(h[1]);
                 } else if (l[2] === ":expr") {
-                    if (s.expr) te("mexp");
+                    if (s.expr) te("mexp", str);
                     var e = exprParse(str, l[0]);
                     l[0] = e[0];
                     s.expr = e[1];
                 } else {
-                    if (s.pc || s.pf ) te("mpc");
+                    if (s.pc || s.pf ) te("mpc", str);
                     s.pf = l[2];
                     var m = nthPat.exec(str.substr(l[0]));
-                    if (!m) te("mepf");
+                    if (!m) te("mepf", str);
                     if (m[5]) {
                         s.a = 2;
                         s.b = (m[5] === "odd") ? 1 : 0;
@@ -390,7 +390,7 @@
         }
 
         // now if we didn't actually parse anything it's an error
-        if (soff === off) te("se");
+        if (soff === off) te("se", str);
 
         return [off, s];
     }
