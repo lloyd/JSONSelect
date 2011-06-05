@@ -41,7 +41,7 @@
 
     // throw an error message
     function te(ec, context) {
-      throw new Error(errorCodes[ec] + " in '" + context + "'");
+      throw new Error(errorCodes[ec] + ( context && " in '" + context + "'"));
     }
 
     // THE LEXER
