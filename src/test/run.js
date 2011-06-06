@@ -34,23 +34,9 @@ function runOneSync(name, selname, p) {
         });
     } catch(e) {
         got = e.toString();
-        if (want.trim() != got.trim()) {
-             
-            // The error messages will have consistent prefix strings, but variant context strings
-            if ( want.trim().indexOf("Error") === -1 && got.trim().indexOf( want.trim() ) !== 0 ) {
-              throw e;
-            }
-            //console.log( "want: " + want.trim() );
-            //console.log( "got: " + got.trim() );
-        }
+        if (want.trim() != got.trim()) throw e;
     }
-    if (want.trim() != got.trim()) {
-      //console.log( "want: " + want.trim() );
-      //console.log( "got: " + got.trim() );    
-      if ( want.trim().indexOf("Error") === -1 && got.trim().indexOf( want.trim() ) !== 0 ) {
-        throw "mismatch";                       
-      }
-    }
+    if (want.trim() != got.trim()) throw "mismatch";
 }
 
 
