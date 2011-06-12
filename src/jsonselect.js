@@ -69,7 +69,7 @@
         // (6) bogusly named pseudo something or others
         "(:\\w+)|" +
         // (7 & 8) identifiers and JSON strings
-        "(?:(\\.)?(\\\"(?:[^\\\\]|\\\\[^\\\"])*\\\"))|" +
+        "(?:(\\.)?(\\\"(?:[^\\\\\\\"]|\\\\[^\\\"])*\\\"))|" +
         // (8) bogus JSON strings missing a trailing quote
         "(\\\")|" +
         // (9) identifiers (unquoted)
