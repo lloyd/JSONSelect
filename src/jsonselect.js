@@ -1,6 +1,31 @@
 /*! Copyright (c) 2011, Lloyd Hilaiel, ISC License */
 /*
- * This is the JSONSelect reference implementation, in javascript.
+ * This is the JSONSelect reference implementation, in javascript.  This
+ * code is designed to run under node.js or in a browser.  In the former
+ * case, the "public API" is exposed as properties on the `export` object,
+ * in the latter, as properties on `window.JSONSelect`.  That API is thus:
+ *
+ * .match(selector, object)
+ *
+ *   Parses and "compiles" the selector, then matches it against the object
+ *   argument.  Matches are returned in an array.  Throws an error when
+ *   there's a problem parsing the selector.
+ *
+ * .forEach(selector, object, callback)
+ *
+ *   Like match, but rather than returning an array, invokes the provided
+ *   callback once per match as the matches are discovered. 
+ * 
+ * .compile(selector) 
+ *
+ *   Parses the selector and compiles it to an internal form, and returns
+ *   an object which contains the compiled selector and has two properties:
+ *   `match` and `forEach`.  These two functions work identically to the
+ *   above, except they do not take a selector as an argument and instead
+ *   use the compiled selector.
+ *
+ *   For cases where a complex selector is repeatedly used, this method
+ *   should be faster as it will avoid recompiling the selector each time. 
  */
 (function(exports) {
 
