@@ -23,5 +23,8 @@
     "JSONSelect.md",
     "package.json",
     "LICENSE"
-  ]
+  ],
+  "scripts": {
+    "test": "node src/test/run.js"
+  }
 }
