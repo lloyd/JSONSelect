@@ -22,7 +22,7 @@ function runOneSync(name, selname, p) {
                                selname + ".selector");
     var outputDocPath = selDocPath.replace(/selector$/, "output");
 
-    // take `obj`, apply `sel, get `got`, is it what we `want`? 
+    // take `obj`, apply `sel, get `got`, is it what we `want`?
     var obj = JSON.parse(fs.readFileSync(testDocPath));
     var want = String(fs.readFileSync(outputDocPath)).trim();
     var got = "";
@@ -41,7 +41,7 @@ function runOneSync(name, selname, p) {
 
 
 function runTests() {
-    console.log("Running Tests:"); 
+    console.log("Running Tests:");
     for (var l in tests) {
         for (var d in tests[l]) {
             console.log("  level " + l + " tests against \"" + d + ".json\":");

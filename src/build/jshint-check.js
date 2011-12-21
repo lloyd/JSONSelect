@@ -17,8 +17,8 @@ var ok = {
 	"Expected an identifier and instead saw \'{a}\' (a reserved word).": true
 };
 
-var e = JSHINT.errors, 
-		found = 0, 
+var e = JSHINT.errors,
+		found = 0,
 		w;
 
 for ( var i = 0; i < e.length; i++ ) {

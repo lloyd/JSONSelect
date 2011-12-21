@@ -14,9 +14,9 @@
  * .forEach(selector, object, callback)
  *
  *   Like match, but rather than returning an array, invokes the provided
- *   callback once per match as the matches are discovered. 
- * 
- * .compile(selector) 
+ *   callback once per match as the matches are discovered.
+ *
+ * .compile(selector)
  *
  *   Parses the selector and compiles it to an internal form, and returns
  *   an object which contains the compiled selector and has two properties:
@@ -25,7 +25,7 @@
  *   use the compiled selector.
  *
  *   For cases where a complex selector is repeatedly used, this method
- *   should be faster as it will avoid recompiling the selector each time. 
+ *   should be faster as it will avoid recompiling the selector each time.
  */
 (function(exports) {
 
@@ -128,7 +128,7 @@
             // skip and don't capture leading whitespace
             "^\\s*(?:" +
             // (1) simple vals
-            "(true|false|null)|" + 
+            "(true|false|null)|" +
             // (2) numbers
             "(-?\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d+)?)|" +
             // (3) strings
@@ -244,7 +244,7 @@
         if (!nested) hints = {};
 
         var a = [], am, readParen;
-        if (!off) off = 0; 
+        if (!off) off = 0;
 
         while (true) {
             var s = parse_selector(str, off, hints);
@@ -423,7 +423,7 @@
     // THE EVALUATOR
 
     function isArray(o) {
-        return Array.isArray ? Array.isArray(o) : 
+        return Array.isArray ? Array.isArray(o) :
           toString.call(o) === "[object Array]";
     }
 
