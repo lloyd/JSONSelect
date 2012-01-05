@@ -2,7 +2,7 @@
   "author": "Lloyd Hilaiel <lloyd@hilaiel.com> (http://lloyd.io)",
   "name": "JSONSelect",
   "description": "CSS-like selectors for JSON",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "homepage": "http://jsonselect.org",
   "repository": {
     "type": "git",
@@ -14,16 +14,6 @@
   },
   "dependencies": {},
   "devDependencies": {},
-  "files": [
-    "src/jsonselect.js",
-    "src/test/run.js",
-    "src/test/tests",
-    "tests",
-    "README.md",
-    "JSONSelect.md",
-    "package.json",
-    "LICENSE"
-  ],
   "scripts": {
     "test": "node src/test/run.js"
   }
