@@ -49,9 +49,9 @@ hint:
 	fi
 
 
-test/tests/README.md: 
-	@@cd .. && git submodule init 
-	@@cd .. && git submodule update 
+test/tests/README.md:
+	@@cd .. && git submodule init
+	@@cd .. && git submodule update
 
 
 tests: test/tests/README.md
