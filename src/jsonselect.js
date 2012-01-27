@@ -5,18 +5,30 @@
  * case, the "public API" is exposed as properties on the `export` object,
  * in the latter, as properties on `window.JSONSelect`.  That API is thus:
  *
- * .match(selector, object)
+ * Selector formating and parameter escaping:
+ *
+ * Anywhere where a string selector is selected, it may be followed by an
+ * optional array of values.  When provided, they will be escaped and
+ * inserted into the selector string properly escaped.  i.e.:
+ *
+ *   .match(':has(?)', [ 'foo' ], {}) 
+ * 
+ * would result in the seclector ':has("foo")' being matched against {}.
+ *
+ * This feature makes dynamically generated selectors more readable.
+ *
+ * .match(selector, [ values ], object)
  *
  *   Parses and "compiles" the selector, then matches it against the object
  *   argument.  Matches are returned in an array.  Throws an error when
  *   there's a problem parsing the selector.
  *
- * .forEach(selector, object, callback)
+ * .forEach(selector, [ values ], object, callback)
  *
  *   Like match, but rather than returning an array, invokes the provided
  *   callback once per match as the matches are discovered. 
  * 
- * .compile(selector) 
+ * .compile(selector, [ values ]) 
  *
  *   Parses the selector and compiles it to an internal form, and returns
  *   an object which contains the compiled selector and has two properties:
@@ -523,7 +535,18 @@
         return a;
     }
 
-    function compile(sel) {
+    function format(sel, arr) {
+        sel = sel.replace(/\?/g, function() {
+            if (arr.length === 0) throw "too few parameters given";
+            var p = arr.shift();
+            return ((typeof p === 'string') ? JSON.stringify(p) : p);
+        });
+        if (arr.length) throw "too many parameters supplied";
+        return sel;
+    } 
+
+    function compile(sel, arr) {
+        if (arr) sel = format(sel, arr);
         return {
             sel: parse(sel)[1],
             match: function(obj){
@@ -537,11 +560,13 @@
 
     exports._lex = lex;
     exports._parse = parse;
-    exports.match = function (sel, obj) {
-        return compile(sel).match(obj);
+    exports.match = function (sel, arr, obj) {
+        if (!obj) { obj = arr; arr = undefined; }
+        return compile(sel, arr).match(obj);
     };
-    exports.forEach = function(sel, obj, fun) {
-        return compile(sel).forEach(obj, fun);
+    exports.forEach = function(sel, arr, obj, fun) {
+        if (!fun) { fun = obj;  obj = arr; arr = undefined }
+        return compile(sel, arr).forEach(obj, fun);
     };
     exports.compile = compile;
 })(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
