@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/lloyd/JSONSelect.png)](http://travis-ci.org/lloyd/JSONSelect)
 JSONSelect is *EXPERIMENTAL*, *ALPHA*, etc.
 
 JSONSelect defines a selector language similar to CSS intended for
