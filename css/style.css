@@ -120,14 +120,13 @@ div#tryit {
 
 .selected {
     opacity: .7;
-    padding: 8px;
+    padding: 1px;
     margin: -10px;
     background-color: #fff475;
     color: #000;
-    border: 2px solid white;
     border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
 }
 
 div.current input, div.selector, pre, code, tt {
