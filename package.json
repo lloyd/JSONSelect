@@ -16,5 +16,10 @@
   "devDependencies": {},
   "scripts": {
     "test": "node src/test/run.js"
+  },
+  "bugs": "https://github.com/lloyd/JSONSelect/issues",
+  "licenses": {
+    "type": "MIT",
+    "url": "https://raw.github.com/lloyd/JSONSelect/master/LICENSE"
   }
 }
