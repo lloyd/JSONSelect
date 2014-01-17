@@ -7,7 +7,7 @@
 const   fs = require('fs'),
       path = require('path'),
 jsonselect = require('../jsonselect.js'),
-       sys = require('sys');
+       util = require('util');
 
 var pathToTests = path.join(__dirname, "tests");
 
@@ -46,7 +46,7 @@ function runTests() {
         for (var d in tests[l]) {
             console.log("  level " + l + " tests against \"" + d + ".json\":");
             for (var i = 0; i < tests[l][d].length; i++) {
-                sys.print("    " + tests[l][d][i][0] + ": ");
+                util.print("    " + tests[l][d][i][0] + ": ");
                 try {
                     runOneSync(d, tests[l][d][i][0], tests[l][d][i][1]);
                     numPassed++;
