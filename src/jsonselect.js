@@ -11,8 +11,8 @@
  * optional array of values.  When provided, they will be escaped and
  * inserted into the selector string properly escaped.  i.e.:
  *
- *   .match(':has(?)', [ 'foo' ], {}) 
- * 
+ *   .match(':has(?)', [ 'foo' ], {})
+ *
  * would result in the seclector ':has("foo")' being matched against {}.
  *
  * This feature makes dynamically generated selectors more readable.
@@ -26,9 +26,9 @@
  * .forEach(selector, [ values ], object, callback)
  *
  *   Like match, but rather than returning an array, invokes the provided
- *   callback once per match as the matches are discovered. 
- * 
- * .compile(selector, [ values ]) 
+ *   callback once per match as the matches are discovered.
+ *
+ * .compile(selector, [ values ])
  *
  *   Parses the selector and compiles it to an internal form, and returns
  *   an object which contains the compiled selector and has two properties:
@@ -37,7 +37,7 @@
  *   use the compiled selector.
  *
  *   For cases where a complex selector is repeatedly used, this method
- *   should be faster as it will avoid recompiling the selector each time. 
+ *   should be faster as it will avoid recompiling the selector each time.
  */
 (function(exports) {
 
@@ -110,7 +110,7 @@
         // (8) bogus JSON strings missing a trailing quote
         "(\\\")|" +
         // (9) identifiers (unquoted)
-        "\\.((?:[_a-zA-Z]|[^\\0-\\0177]|\\\\[^\\r\\n\\f0-9a-fA-F])(?:[\$_a-zA-Z0-9\\-]|[^\\u0000-\\u0177]|(?:\\\\[^\\r\\n\\f0-9a-fA-F]))*)" +
+        "\\.((?:[_a-zA-Z]|[^\\0-\\0177]|\\\\[^\\r\\n\\f0-9a-fA-F])(?:[\\$_a-zA-Z0-9\\-]|[^\\u0000-\\u0177]|(?:\\\\[^\\r\\n\\f0-9a-fA-F]))*)" +
         ")"
     );
 
@@ -140,7 +140,7 @@
             // skip and don't capture leading whitespace
             "^\\s*(?:" +
             // (1) simple vals
-            "(true|false|null)|" + 
+            "(true|false|null)|" +
             // (2) numbers
             "(-?\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d+)?)|" +
             // (3) strings
@@ -256,7 +256,7 @@
         if (!nested) hints = {};
 
         var a = [], am, readParen;
-        if (!off) off = 0; 
+        if (!off) off = 0;
 
         while (true) {
             var s = parse_selector(str, off, hints);
@@ -543,7 +543,7 @@
         });
         if (arr.length) throw "too many parameters supplied";
         return sel;
-    } 
+    }
 
     function compile(sel, arr) {
         if (arr) sel = format(sel, arr);
@@ -565,7 +565,7 @@
         return compile(sel, arr).match(obj);
     };
     exports.forEach = function(sel, arr, obj, fun) {
-        if (!fun) { fun = obj;  obj = arr; arr = undefined }
+        if (!fun) { fun = obj;  obj = arr; arr = undefined; }
         return compile(sel, arr).forEach(obj, fun);
     };
     exports.compile = compile;
