@@ -492,11 +492,17 @@
         return [m, sels];
     }
 
-    function forEach(sel, obj, fun, id, num, tot) {
+    function forEach(sel, obj, fun, id, num, tot, traversed) {
         var a = (sel[0] === ",") ? sel.slice(1) : [sel],
         a0 = [],
         call = false,
         i = 0, j = 0, k, x;
+
+        if (!traversed) {
+            traversed = [];
+        }
+        traversed.push(obj);
+        
         for (i = 0; i < a.length; i++) {
             x = mn(obj, a[i], id, num, tot);
             if (x[0]) {
@@ -512,12 +518,14 @@
             }
             if (isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
-                    forEach(a0, obj[i], fun, undefined, i, obj.length);
+                    if (!~traversed.indexOf(obj[i])) {
+                        forEach(a0, obj[i], fun, undefined, i, obj.length, traversed);
+                    }
                 }
             } else {
                 for (k in obj) {
-                    if (obj.hasOwnProperty(k)) {
-                        forEach(a0, obj[k], fun, k);
+                    if (obj.hasOwnProperty(k) && !~traversed.indexOf(obj[k])) {
+                        forEach(a0, obj[k], fun, k, undefined, undefined, traversed);
                     }
                 }
             }
@@ -570,3 +578,4 @@
     };
     exports.compile = compile;
 })(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
+
