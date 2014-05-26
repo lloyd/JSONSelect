@@ -516,7 +516,7 @@
                 }
             } else {
                 for (k in obj) {
-                    if (!exports.ignore[k] && obj.hasOwnProperty(k)) {
+                    if (obj.hasOwnProperty(k)) {
                         forEach(a0, obj[k], fun, k, undefined, undefined, obj);
                     }
                 }
@@ -560,7 +560,6 @@
 
     exports._lex = lex;
     exports._parse = parse;
-    exports.ignore = {};
     exports.match = function (sel, arr, obj) {
         if (!obj) { obj = arr; arr = undefined; }
         return compile(sel, arr).match(obj);
