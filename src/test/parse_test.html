@@ -19,11 +19,11 @@
 Selectors
 <pre class="doctest">
 $ JSONSelect._parse(".foo");
-[{id: "foo"}]
+[4, [{id: "foo"}]]
 $ JSONSelect._parse('." foo "');
-[{id: " foo "}]
+[8, [{id: " foo "}]]
 $ JSONSelect._parse("string.foo:last-child");
-[{a: 0, b: 1, id: "foo", pf: ":nth-last-child", type: "string"}]
+[21, [{a: 0, b: 1, id: "foo", pf: ":nth-last-child", type: "string"}]]
 $ JSONSelect._parse("string.foo.bar");
 Error: multiple ids not allowed
 $ JSONSelect._parse("string.foo:first-child.bar");
@@ -35,9 +35,9 @@ Error: string required after '.'
 $ JSONSelect._parse("string:bogus");
 Error: unrecognized pseudo class
 $ JSONSelect._parse("string.xxx\\@yyy");
-[{id: "xxx@yyy", type: "string"}]
+[15, [{id: "xxx@yyy", type: "string"}]]
 $ JSONSelect._parse(" ");
-Error: selector expected
+Error: selector expected in ' '
 $ JSONSelect._parse("");
 Error: selector expected
 </pre>
@@ -47,21 +47,24 @@ Error: selector expected
 Combinators
 <pre class="doctest">
 $ JSONSelect._parse(".foo .bar");
-[{id: "foo"}, {id: "bar"}]
+[9, [{id: "foo"}, {id: "bar"}]]
 $ JSONSelect._parse("string.foo , number.foo");
-[",", [{id: "foo", type: "string"}], [{id: "foo", type: "number"}]]
+[23, [",", [{id: "foo", type: "string"}], [{id: "foo", type: "number"}]]]
 $ JSONSelect._parse("string > .foo number.bar");
-[{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}]
+[24, [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}]]
 $ JSONSelect._parse("string > .foo number.bar, object");
-[",", [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}], [{type: "object"}]]
+[32, [",", [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}], [{type: "object"}]]]
 $ JSONSelect._parse("string > .foo number.bar, object, string, .\"baz bing\", :root");
 [
-  ",",
-  [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}],
-  [{type: "object"}],
-  [{type: "string"}],
-  [{id: "baz bing"}],
-  [{pc: ":root"}]
+  60,
+  [
+    ",",
+    [{type: "string"}, ">", {id: "foo"}, {id: "bar", type: "number"}],
+    [{type: "object"}],
+    [{type: "string"}],
+    [{id: "baz bing"}],
+    [{pc: ":root"}]
+  ]
 ]
 </pre>
 </div>
@@ -70,25 +73,25 @@ $ JSONSelect._parse("string > .foo number.bar, object, string, .\"baz bing\", :r
 Expressions
 <pre class="doctest">
 $ JSONSelect._parse(":nth-child(1)");
-[{a: 0, b: 1, pf: ":nth-child"}]
+[13, [{a: 0, b: 1, pf: ":nth-child"}]]
 $ JSONSelect._parse(":nth-child(2n+1)");
-[{a: 2, b: 1, pf: ":nth-child"}]
+[16, [{a: 2, b: 1, pf: ":nth-child"}]]
 $ JSONSelect._parse(":nth-child ( 2n + 1 )");
-[{a: 2, b: 1, pf: ":nth-child"}]
+[21, [{a: 2, b: 1, pf: ":nth-child"}]]
 $ JSONSelect._parse(":nth-child(odd)");
-[{a: 2, b: 1, pf: ":nth-child"}]
+[15, [{a: 2, b: 1, pf: ":nth-child"}]]
 $ JSONSelect._parse(":nth-child(even)");
-[{a: 2, b: 0, pf: ":nth-child"}]
+[16, [{a: 2, b: 0, pf: ":nth-child"}]]
 $ JSONSelect._parse(":nth-child(-n+6)");
-[{a: -1, b: 6, pf: ":nth-child"}]
+[16, [{a: -1, b: 6, pf: ":nth-child"}]]
 $ JSONSelect._parse(":nth-child(2n)");
-[{a: 2, b: 0, pf: ":nth-child"}]
+[14, [{a: 2, b: 0, pf: ":nth-child"}]]
 $ JSONSelect._parse(":nth-last-child(-3n - 3)");
-[{a: -3, b: -3, pf: ":nth-last-child"}]
+[24, [{a: -3, b: -3, pf: ":nth-last-child"}]]
 $ JSONSelect._parse(":first-child");
-[{a: 0, b: 1, pf: ":nth-child"}]
+[12, [{a: 0, b: 1, pf: ":nth-child"}]]
 $ JSONSelect._parse(":last-child");
-[{a: 0, b: 1, pf: ":nth-last-child"}]
+[11, [{a: 0, b: 1, pf: ":nth-last-child"}]]
 </pre>
 </div>
 

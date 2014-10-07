@@ -1,12 +1,17 @@
 $(document).ready(function() {
     var tests = {};
 
+    // Turn k into a valid CSS class name.
+    function classify(k) {
+        return k.replace(/\//g, '-');
+    }
+
     $("#runit").click(function() {
         for (var k in tests) {
-            var obj = JSON.parse($("." + k + "_document").text());
+            var obj = JSON.parse($("." + classify(k) + "_document").text());
             for (var i = 0; i < tests[k].length; i++) {
                 var n = tests[k][i];
-                var cl = k + "_" + n;
+                var cl = classify(k) + "_" + n;
                 var b = $("." + cl + "_output.before");
                 var a = $("." + cl + "_output.after");
                 var s = $("." + cl + "_selector.selector");
@@ -16,7 +21,7 @@ $(document).ready(function() {
                         a.text($.trim(a.text() + "\n" + JSON.stringify(m, null, "    ")));
                     });
                 } catch(e) {
-                    a.text("Error: " + e);
+                    a.text("" + e);
                 }
                 if (a.text() === b.text()) s.addClass("success").removeClass("failure");
                 else s.addClass("failure").removeClass("success");
@@ -27,7 +32,7 @@ $(document).ready(function() {
     function fetchFile(p, c) {
         $.get(p, function (data) {
             $("." + c).text($.trim(data));
-        });
+        }, 'text');
     }
 
     function renderTests() {
@@ -38,16 +43,16 @@ $(document).ready(function() {
         var c = $("<div/>");
         for (var k in tests) {
             c.append($("<h1/>").text("document: " + k));
-            var cl = k + "_document";
+            var cl = classify(k) + "_document";
             c.append($("<pre/>").addClass(cl).addClass("document").text("loading document..."));
             fetchFile("tests/" + k + ".json", cl);
             for (var i = 0; i < tests[k].length; i++) {
                 var n = tests[k][i];
-                var cl = k + "_" + n + "_selector";
+                var cl = classify(k) + "_" + n + "_selector";
                 var s = $("<pre/>").addClass(cl).addClass("selector").text("loading selector...");
                 c.append(s);
                 fetchFile("tests/" + k + "_" + n + ".selector", cl);
-                cl = k + "_" + n + "_output";
+                cl = classify(k) + "_" + n + "_output";
                 var t = $("<table/>").append($("<tr/>").append(
                     $("<td/>").append($("<pre/>").addClass(cl).addClass("before").text("loading output..."))).append(
                     $("<td/>").append($("<pre/>").addClass(cl).addClass("after").text("... test output ..."))));
@@ -61,12 +66,12 @@ $(document).ready(function() {
         c.appendTo($("#tests"));
     }
 
-    $.get("tests/alltests.txt", function (data) {
+    $.get("alltests.txt", function (data) {
         var lines = data.split("\n");
         for (var i = 0; i < lines.length; i++) {
             var f = $.trim(lines[i]);
             if (f.length == 0) continue;
-            var m = /^([A-Za-z]+)_(.+)\.selector$/.exec(f);
+            var m = /^([A-Za-z_0-9]+\/[A-Za-z0-9]+)_(.+)\.selector$/.exec(f);
             if (m) {
                 if (!tests.hasOwnProperty(m[1])) tests[m[1]] = [];
                 tests[m[1]].push(m[2]);
