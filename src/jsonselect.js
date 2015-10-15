@@ -466,15 +466,11 @@
         if (m && cs.has) {
             // perhaps we should augment forEach to handle a return value
             // that indicates "client cancels traversal"?
-            var bail = function() { throw 42; };
             for (var i = 0; i < cs.has.length; i++) {
-                try {
-                    forEach(cs.has[i], node, bail);
-                } catch (e) {
-                    if (e === 42) continue;
+                if (!forEach(cs.has[i], node, null)){
+                    m = false;
+                    break;
                 }
-                m = false;
-                break;
             }
         }
         if (m && cs.expr) {
@@ -496,28 +492,41 @@
         var a = (sel[0] === ",") ? sel.slice(1) : [sel],
         a0 = [],
         call = false,
-        i = 0, j = 0, k, x;
-        for (i = 0; i < a.length; i++) {
+        i = 0, j = 0, imax, jmax, k,
+        x, xi, r;
+
+        imax = a.length;
+        for (i = 0; i < imax; i++) {
             x = mn(obj, a[i], id, num, tot);
             if (x[0]) {
+                if(fun === null)
+                    return obj;
                 call = true;
             }
-            for (j = 0; j < x[1].length; j++) {
-                a0.push(x[1][j]);
+            xi = x[1];
+            jmax = xi.length;
+            for (j = 0; j < jmax; j++) {
+                a0.push(xi[j]);
             }
         }
+
         if (a0.length && typeof obj === "object") {
             if (a0.length >= 1) {
                 a0.unshift(",");
             }
             if (isArray(obj)) {
-                for (i = 0; i < obj.length; i++) {
-                    forEach(a0, obj[i], fun, undefined, i, obj.length);
+                imax = obj.length;
+                for (i = 0; i < imax; i++) {
+                    r = forEach(a0, obj[i], fun, undefined, i, obj.length);
+                    if(fun === null && r)
+                        return r;
                 }
             } else {
                 for (k in obj) {
                     if (obj.hasOwnProperty(k)) {
-                        forEach(a0, obj[k], fun, k);
+                        r = forEach(a0, obj[k], fun, k);
+                        if (fun === null && r)
+                            return r;
                     }
                 }
             }
@@ -525,6 +534,7 @@
         if (call && fun) {
             fun(obj);
         }
+        return null;
     }
 
     function match(sel, obj) {
