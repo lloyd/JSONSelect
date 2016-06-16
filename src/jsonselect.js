@@ -42,7 +42,8 @@
 (function(exports) {
 
     var // localize references
-    toString = Object.prototype.toString;
+    toString = Object.prototype.toString,
+    line;
 
     function jsonParse(str) {
       try {
@@ -535,6 +536,99 @@
         return a;
     }
 
+    function stringify(sel, obj, id, num, tot, level, indent, matches) {
+        var a = (sel[0] === ",") ? sel.slice(1) : [sel],
+        a0 = [],
+        call = false,
+        lineStart, columnStart, lineEnd, columnEnd,
+        i = 0, j = 0, k, x, y, ret;
+        for (i = 0; i < a.length; i++) {
+        x = mn(obj, a[i], id, num, tot);
+            if (x[0]) {
+                call = true;
+                lineStart = line;
+                columnStart = ((level - 1) * indent);
+                if (typeof id !== 'undefined') {
+                    columnStart += id.length + 4;
+                }
+            }
+            for (j = 0; j < x[1].length; j++) {
+                a0.push(x[1][j]);
+            }
+        }
+
+        if (a0.length && a0.length >= 1) {
+            a0.unshift(",");
+        }
+
+        ret = '';
+        if (typeof id !== 'undefined') {
+            ret += '"' + id + '": ';
+        }
+        if (typeof obj === "object") {
+            y = [];
+            if (isArray(obj)) {
+                if (obj.length > 0) {
+                    for (i = 0; i < obj.length; i++) {
+                        line += 1;
+                        y.push(stringify(a0, obj[i], undefined, i, obj.length, level + 1, indent, matches));
+                    }
+                    ret += '[\n' + pad(level * indent) + y.join(',' + '\n' + pad(level * indent)) + '\n' + pad((level - 1) * indent) + ']';
+                    line += 1;
+                    columnEnd = ((level - 1) * indent) + 1;
+                } else {
+                    ret += '[]';
+                    columnEnd = columnStart + 2;
+                }
+            } else {
+                for (k in obj) {
+                    if (obj.hasOwnProperty(k)) {
+                        line += 1;
+                        y.push(stringify(a0, obj[k], k, undefined, undefined, level + 1, indent, matches));
+                    }
+                }
+                if (y.length > 0) {
+                    ret += '{\n' + pad(level * indent) + y.join(',' + '\n' + pad(level * indent)) + '\n' + pad((level - 1) * indent) + '}';
+                    line += 1;
+                    columnEnd = ((level - 1) * indent) + 1;
+                } else {
+                    ret += '{}';
+                    columnEnd = columnStart + 2;
+                }
+            }
+        }
+        else if (typeof obj === "string") {
+            ret += '"' + obj.replace(/"/g, '\\"') + '"';
+            columnEnd = columnStart + obj.length + 2;
+        }
+        else {
+            ret += String(obj);
+            columnEnd = columnStart + String(obj).length;
+        }
+
+        if (call) {
+            lineEnd = line;
+            matches.push({
+                match: obj,
+                lineStart: lineStart,
+                columnStart: columnStart,
+                lineEnd: lineEnd,
+                columnEnd: columnEnd
+            });
+        }
+
+        return ret;
+    }
+
+    function pad(num, char) {
+        char = char || ' ';
+        var r = '', i;
+        for (i = 0; i < num; ++i) {
+            r += char;
+        }
+        return r;
+    }
+
     function format(sel, arr) {
         sel = sel.replace(/\?/g, function() {
             if (arr.length === 0) throw "too few parameters given";
@@ -554,6 +648,16 @@
             },
             forEach: function(obj, fun) {
                 return forEach(this.sel, obj, fun);
+            },
+            stringify: function (obj, indent) {
+                indent = typeof indent === 'undefined' ? 2 : indent;
+                line = 1;
+                var matches = [];
+                var formattedJson = stringify(this.sel, obj, undefined, undefined, undefined, 1, indent, matches);
+                return {
+                    matches: matches,
+                    json: formattedJson
+                };
             }
         };
     }
@@ -567,6 +671,10 @@
     exports.forEach = function(sel, arr, obj, fun) {
         if (!fun) { fun = obj;  obj = arr; arr = undefined; }
         return compile(sel, arr).forEach(obj, fun);
+    };
+    exports.stringify = function (sel, arr, obj, indent) {
+        if (!obj) { obj = arr; arr = undefined; }
+        return compile(sel, arr).stringify(obj, indent);
     };
     exports.compile = compile;
 })(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
