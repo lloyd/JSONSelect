@@ -547,7 +547,10 @@
             if (x[0]) {
                 call = true;
                 lineStart = line;
-                columnStart = ((level - 1) * indent) + id.length + 4;
+                columnStart = ((level - 1) * indent);
+                if (typeof id !== 'undefined') {
+                    columnStart += id.length + 4;
+                }
             }
             for (j = 0; j < x[1].length; j++) {
                 a0.push(x[1][j]);
