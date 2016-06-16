@@ -598,7 +598,7 @@
             }
         }
         else if (typeof obj === "string") {
-            ret += '"' + obj + '"';
+            ret += '"' + obj.replace(/"/g, '\\"') + '"';
             columnEnd = columnStart + obj.length + 2;
         }
         else {
