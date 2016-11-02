@@ -76,6 +76,9 @@
         "upc":  "unrecognized pseudo class"
     };
 
+    // Ignore keys to be traversed [function].
+    var ignoreKey;
+
     // throw an error message
     function te(ec, context) {
       throw new Error(errorCodes[ec] + ( context && " in '" + context + "'"));
@@ -492,7 +495,7 @@
         return [m, sels];
     }
 
-    function forEach(sel, obj, fun, id, num, tot) {
+    function forEach(sel, obj, fun, id, num, tot, parent) {
         var a = (sel[0] === ",") ? sel.slice(1) : [sel],
         a0 = [],
         call = false,
@@ -512,18 +515,18 @@
             }
             if (isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
-                    forEach(a0, obj[i], fun, undefined, i, obj.length);
+                    forEach(a0, obj[i], fun, undefined, i, obj.length, obj);
                 }
             } else {
                 for (k in obj) {
-                    if (obj.hasOwnProperty(k)) {
-                        forEach(a0, obj[k], fun, k);
+                    if ((!ignoreKey || !ignoreKey(k)) && obj.hasOwnProperty(k)) {
+                        forEach(a0, obj[k], fun, k, undefined, undefined, obj);
                     }
                 }
             }
         }
         if (call && fun) {
-            fun(obj);
+            fun(obj, id === undefined ? num : id, parent);
         }
     }
 
@@ -569,4 +572,7 @@
         return compile(sel, arr).forEach(obj, fun);
     };
     exports.compile = compile;
+    exports.setIgnoreKey = function(fn) {
+        ignoreKey = fn;
+    };
 })(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
