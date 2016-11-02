@@ -76,6 +76,9 @@
         "upc":  "unrecognized pseudo class"
     };
 
+    // Ignore keys to be traversed [function].
+    var ignoreKey;
+
     // throw an error message
     function te(ec, context) {
       throw new Error(errorCodes[ec] + ( context && " in '" + context + "'"));
@@ -516,7 +519,7 @@
                 }
             } else {
                 for (k in obj) {
-                    if ((!exports.ignoreKey || !exports.ignoreKey(k)) && obj.hasOwnProperty(k)) {
+                    if ((!ignoreKey || !ignoreKey(k)) && obj.hasOwnProperty(k)) {
                         forEach(a0, obj[k], fun, k, undefined, undefined, obj);
                     }
                 }
@@ -569,4 +572,7 @@
         return compile(sel, arr).forEach(obj, fun);
     };
     exports.compile = compile;
+    exports.setIgnoreKey = function(fn) {
+        ignoreKey = fn;
+    };
 })(typeof exports === "undefined" ? (window.JSONSelect = {}) : exports);
