@@ -1,0 +1,5 @@
+{
+  "evil": true,
+  "forin": true,
+  "maxerr": 100
+}

@@ -6,7 +6,7 @@ DIST_DIR = ${PREFIX}/dist
 
 
 JS_ENGINE ?= `which node nodejs 2> /dev/null`
-COMPILER = ${JS_ENGINE} ${BUILD_DIR}/uglify.js --unsafe
+COMPILER = ../node_modules/.bin/uglifyjs -c unsafe
 POST_COMPILER = ${JS_ENGINE} ${BUILD_DIR}/post-compile.js
 
 SRC = ${SRC_DIR}/jsonselect.js
@@ -43,7 +43,7 @@ ${DIST_MIN}: ${DIST}
 hint:
 	@@if test ! -z ${JS_ENGINE}; then \
 		echo "Hinting Project"; \
-		${JS_ENGINE} build/jshint-check.js; \
+		../node_modules/.bin/jshint jsonselect.js; \
 	else \
 		echo "Nodejs is missing"; \
 	fi
