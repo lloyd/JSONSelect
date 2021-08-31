@@ -9,6 +9,7 @@
     "url": "https://github.com/lloyd/JSONSelect.git"
   },
   "main": "src/jsonselect",
+  "types": "src/jsonselect.d.ts",
   "engines": {
     "node": ">=0.4.7"
   },
